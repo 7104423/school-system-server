@@ -36,6 +36,10 @@ passport.serializeUser((userObj, done) => {
 passport.deserializeUser((userObj, done) => {
   done(null, userObj);
 });
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/dashboard',
+  failureRedirect: '/login',
+}));
 
 // Router
 app.use('/', indexRouter);
