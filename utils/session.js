@@ -24,4 +24,4 @@ const logOut = (req, res, next) => {
   return res.redirect('/login');
 };
 
-module.exports = [checkAuthenticated, checkLoggedIn, logOut];
+module.exports = { checkAuthenticated, checkLoggedIn, logOut };

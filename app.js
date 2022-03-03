@@ -6,8 +6,7 @@ const logger = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const router = require('./routes/_router');
 
 // App config
 const app = express();
@@ -38,11 +37,6 @@ passport.deserializeUser((userObj, done) => {
 });
 
 // Router
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.post('/login', passport.authenticate('local', {
-  successRedirect: '/dashboard',
-  failureRedirect: '/login',
-}));
+router(app);
 
 module.exports = app;
