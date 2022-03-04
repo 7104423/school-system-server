@@ -3,8 +3,9 @@ const { getRoutes } = require('../../utils/utils');
 
 const directoryPath = path.join(__dirname);
 
-module.exports = (app) => {
-  getRoutes(directoryPath).forEach(([route, routeObj]) => {
+module.exports = async (app) => {
+  const routes = await getRoutes(directoryPath);
+  routes.forEach(([route, routeObj]) => {
     app.use(route, routeObj);
   });
 };

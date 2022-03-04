@@ -25,18 +25,23 @@ const logOut = (req, res, next) => {
   return res.redirect('/login');
 };
 
-const getRoutes = (directoryPath) => {
+const getRoutes = (directoryPath) => new Promise((resolve, reject) => {
   fs.readdir(directoryPath, (error, files) => {
     if (error) {
-      // eslint-disable-next-line no-console
-      console.error(`Unable to scan directory: ${error}`);
-      return [];
+      reject(error);
+    } else {
+      resolve(
+        files
+          .filter((file) => !file.startsWith('_') && file.endsWith('.js'))
+          .map((file) => [
+            `/${file.replace('.js', '')}`,
+            // eslint-disable-next-line global-require,import/no-dynamic-require
+            require(`${directoryPath}/${file}`),
+          ]),
+      );
     }
-    return files
-      .filter((file) => !file.startsWith('_'))
-      .map((file) => file.replace('.js', ''));
   });
-};
+});
 
 module.exports = {
   checkAuthenticated, checkLoggedIn, logOut, getRoutes,
