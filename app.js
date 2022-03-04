@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('passport');
 const router = require('./routes/_router');
+const secureRoute = require('./routes/secureRoute/_router');
 
 // App config
 const app = express();
@@ -20,6 +21,7 @@ router(app);
 
 // Auth
 require('./utils/auth');
+
 app.use('/user', passport.authenticate('jwt', { session: false }), secureRoute);
 
 module.exports = app;
