@@ -1,5 +1,5 @@
 const path = require('path');
-const { getRoutes } = require('../utils/utils');
+const { getRoutes } = require('../../utils/utils');
 
 module.exports = (app) => {
   const directoryPath = path.join(__dirname);
