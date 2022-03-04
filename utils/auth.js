@@ -1,21 +1,68 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const JWTstrategy = require('passport-jwt').Strategy;
+const ExtractJWT = require('passport-jwt').ExtractJwt;
+const UserModel = require('../model/user.model');
 
-module.exports = () => {
-  // Find user in a database
-  const authUser = (user, password, done) => {
-    const authenticatedUser = { id: 123, name: 'Kyle' };
-    return done(null, authenticatedUser);
-  };
-  passport.use(new LocalStrategy(authUser));
+passport.use(
+  'signup',
+  new LocalStrategy(
+    {
+      usernameField: 'email',
+      passwordField: 'password',
+    },
+    async (email, password, done) => {
+      try {
+        const user = await UserModel.create({ email, password });
+        return done(null, user);
+      } catch (error) {
+        return done(error);
+      }
+    },
+  ),
+);
 
-  // Serialize user
-  passport.serializeUser((userObj, done) => {
-    done(null, userObj);
-  });
+passport.use(
+  'login',
+  new LocalStrategy(
+    {
+      usernameField: 'email',
+      passwordField: 'password',
+    },
+    async (email, password, done) => {
+      try {
+        const user = await UserModel.findOne({ email });
 
-  // Deserialize - remove password
-  passport.deserializeUser((userObj, done) => {
-    done(null, userObj);
-  });
-};
+        if (!user) {
+          return done(null, false, { message: 'User not found' });
+        }
+
+        const validate = await user.isValidPassword(password);
+
+        if (!validate) {
+          return done(null, false, { message: 'Wrong Password' });
+        }
+
+        return done(null, user, { message: 'Logged in Successfully' });
+      } catch (error) {
+        return done(error);
+      }
+    },
+  ),
+);
+
+passport.use(
+  new JWTstrategy(
+    {
+      secretOrKey: process.env.JWT_SECRET,
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken('secret_token'),
+    },
+    async (token, done) => {
+      try {
+        return done(null, token.user);
+      } catch (error) {
+        return done(error);
+      }
+    },
+  ),
+);

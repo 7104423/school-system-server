@@ -7,7 +7,6 @@ const logger = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
 const router = require('./routes/_router');
-const auth = require('./utils/auth');
 
 // App config
 const app = express();
@@ -25,7 +24,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Auth
-auth();
+require('./utils/auth');
 
 // Router
 router(app);

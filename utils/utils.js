@@ -1,5 +1,5 @@
 /*
- * For more info see: bit.ly/3INUAm8
+ * For more info see: https://bit.ly/3INUAm8
  */
 
 const checkAuthenticated = (req, res, next) => {
