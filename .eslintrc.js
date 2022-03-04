@@ -12,5 +12,6 @@ module.exports = {
   },
   rules: {
     'linebreak-style': ['off'],
+    'max-len': ['error', { code: 80, tabWidth: 2 }],
   },
 };

@@ -1,15 +1,23 @@
-const indexRouter = require('./index');
-const usersRouter = require('./users');
-const loginRouter = require('./login');
+const path = require('path');
+const fs = require('fs');
 
-const ROUTES = [
-  ['/', indexRouter],
-  ['/users', usersRouter],
-  ['/login', loginRouter],
-];
+const directoryPath = path.join(__dirname);
+
+const getRoutes = () => {
+  fs.readdir(directoryPath, (error, files) => {
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error(`Unable to scan directory: ${error}`);
+      return [];
+    }
+    return files
+      .filter((file) => !file.startsWith('_'))
+      .map((file) => file.replace('.js', ''));
+  });
+};
 
 module.exports = (app) => {
-  ROUTES.forEach(([route, routeObj]) => {
+  getRoutes().forEach(([route, routeObj]) => {
     app.use(route, routeObj);
   });
 };
