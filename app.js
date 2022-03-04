@@ -1,12 +1,13 @@
 // Imports
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
-const LocalStrategy = require('passport-local').Strategy;
 const router = require('./routes/_router');
+const auth = require('./utils/auth');
 
 // App config
 const app = express();
@@ -16,7 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: 'secret',
+  secret: process.env.SESSION_HASH,
   resave: false,
   saveUninitialized: true,
 }));
@@ -24,17 +25,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Auth
-const authUser = (user, password, done) => {
-  const authenticatedUser = { id: 123, name: 'Kyle' };
-  return done(null, authenticatedUser);
-};
-passport.use(new LocalStrategy(authUser));
-passport.serializeUser((userObj, done) => {
-  done(null, userObj);
-});
-passport.deserializeUser((userObj, done) => {
-  done(null, userObj);
-});
+auth();
 
 // Router
 router(app);
