@@ -34,7 +34,7 @@ const getRoutes = (directoryPath) => new Promise((resolve, reject) => {
         files
           .filter((file) => !file.startsWith('_') && file.endsWith('.js'))
           .map((file) => [
-            `/${file.replace('.js', '')}`,
+            file.replace('.js', ''),
             // eslint-disable-next-line global-require,import/no-dynamic-require
             require(`${directoryPath}/${file}`),
           ]),
