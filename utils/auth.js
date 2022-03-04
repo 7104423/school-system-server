@@ -1,7 +1,9 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const JWTstrategy = require('passport-jwt').Strategy;
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
+const crypto = require('crypto');
 const UserModel = require('../model/user.model');
 
 passport.use(
@@ -50,6 +52,23 @@ passport.use(
     },
   ),
 );
+
+passport.use(new GoogleStrategy(
+  {
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:3000/auth/google/callback',
+    passReqToCallback: true,
+  },
+  (async (request, accessToken, refreshToken, { email }, done) => {
+    let user = await UserModel.findOne({ email });
+    if (!user) {
+      const password = crypto.randomBytes(64).toString('hex');
+      user = await UserModel.create({ email, password });
+    }
+    return done(null, user, { message: 'Logged in Successfully' });
+  }),
+));
 
 passport.use(
   new JWTstrategy(
