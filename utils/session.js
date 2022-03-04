@@ -1,5 +1,5 @@
 /*
- * For more info see: https://medium.com/@prashantramnyc/node-js-with-passport-authentication-simplified-76ca65ee91e5
+ * For more info see: bit.ly/3INUAm8
  */
 
 const checkAuthenticated = (req, res, next) => {
