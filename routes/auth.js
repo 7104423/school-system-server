@@ -1,6 +1,6 @@
-const router = require('express').Router();
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
+import router from '../utils/router';
+import passport from 'passport';
+import jwt from 'jsonwebtoken';
 
 router.get(
   '/google',
@@ -35,9 +35,8 @@ router.get(
             // eslint-disable-next-line no-underscore-dangle
             const body = { _id: user._id, email: user.email };
             const token = jwt.sign({ user: body }, process.env.JWT_SECRET);
-            return res.redirect(
-              `${process.env.CLIENT_URL_AUTH}?jwt_token=${token}`,
-            );
+            res.cookie('jwt', token);
+            return res.redirect(process.env.CLIENT_URL);
           },
         );
       } catch (error) {
@@ -47,4 +46,4 @@ router.get(
   },
 );
 
-module.exports = router;
+export default router;

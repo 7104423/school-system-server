@@ -1,8 +1,5 @@
-const router = require('express').Router();
+import router from "../utils/router";
 
-/* GET users listing. */
-router.get('/', (req, res) => {
+export default router.get('/', (req, res) => {
   res.send('respond with a resource');
 });
-
-module.exports = router;

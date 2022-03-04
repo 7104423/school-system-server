@@ -1,7 +1,6 @@
-module.exports = {
+export default {
   env: {
     browser: true,
-    commonjs: true,
     es2021: true,
   },
   extends: [
@@ -9,6 +8,7 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 'latest',
+    sourceType: 'module',
   },
   rules: {
     'linebreak-style': ['off'],

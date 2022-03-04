@@ -1,9 +1,8 @@
-const router = require('express').Router();
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
+import router from '../utils/router';
+import passport from 'passport';
+import jwt from 'jsonwebtoken';
 
-/* GET home page. */
-router.post('/', async (req, res, next) => {
+export default router.post('/', async (req, res, next) => {
   passport.authenticate(
     'login',
     async (err, user) => {
@@ -33,5 +32,3 @@ router.post('/', async (req, res, next) => {
     },
   )(req, res, next);
 });
-
-module.exports = router;

@@ -1,10 +1,8 @@
-const path = require('path');
-const { getRoutes } = require('../utils/utils');
+import path from 'path';
+import { getRoutes } from '../utils/utils'
 
-const directoryPath = path.join(__dirname);
-
-module.exports = async (app) => {
-  const routes = await getRoutes(directoryPath);
+export default async (app) => {
+  const routes = await getRoutes(path.join(__dirname));
   routes.forEach(([route, routeObj]) => {
     app.use(`/${route}`, routeObj);
   });

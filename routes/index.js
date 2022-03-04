@@ -1,8 +1,6 @@
-const router = require('express').Router();
+import router from '../utils/router';
 
 /* GET home page. */
-router.get('/', (req, res) => {
+export default router.get('/', (req, res) => {
   res.render('index', { title: 'Express' });
 });
-
-module.exports = router;

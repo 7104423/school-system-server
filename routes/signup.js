@@ -1,7 +1,7 @@
-const router = require('express').Router();
-const passport = require('passport');
+import router from '../utils/router';
+import passport from 'passport';
 
-router.post(
+export default router.post(
   '/',
   passport.authenticate('signup', { session: false }),
   async (req, res) => {
@@ -11,5 +11,3 @@ router.post(
     });
   },
 );
-
-module.exports = router;

@@ -1,13 +1,14 @@
 // Imports
 require('dotenv').config();
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const router = require('./routes/_router');
-const secureRoute = require('./routes/app/_router');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import logger from morgan;
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import router from './routes/_router';
+import secureRoute from './routes/app/_router';
+import auth from './utils/auth';
 
 // App config
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 // Body parser
 app.use(bodyParser.urlencoded({
@@ -36,7 +38,7 @@ if (!db) {
 }
 
 // Auth
-require('./utils/auth');
+auth();
 
 // Router
 router(app);
@@ -45,4 +47,4 @@ secureRoute(app);
 // eslint-disable-next-line no-console
 console.log('Application runs on: http://localhost:3000/');
 
-module.exports = app;
+export default app;

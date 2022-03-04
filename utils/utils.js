@@ -1,23 +1,20 @@
-/*
-* For more info see: https://bit.ly/3INUAm8
-*/
-const fs = require('fs');
+import fs from 'fs';
 
-const checkAuthenticated = (req, res, next) => {
+export const checkAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
   return res.redirect('/login');
 };
 
-const checkLoggedIn = (req, res, next) => {
+export const checkLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return res.redirect('/dashboard');
   }
   return next();
 };
 
-const logOut = (req, res, next) => {
+export const logOut = (req, res, next) => {
   if (!req.isAuthenticated()) {
     return next();
   }
@@ -25,7 +22,7 @@ const logOut = (req, res, next) => {
   return res.redirect('/login');
 };
 
-const getRoutes = (directoryPath) => new Promise((resolve, reject) => {
+export const getRoutes = (directoryPath) => new Promise((resolve, reject) => {
   fs.readdir(directoryPath, (error, files) => {
     if (error) {
       reject(error);
@@ -42,7 +39,3 @@ const getRoutes = (directoryPath) => new Promise((resolve, reject) => {
     }
   });
 });
-
-module.exports = {
-  checkAuthenticated, checkLoggedIn, logOut, getRoutes,
-};
