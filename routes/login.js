@@ -1,8 +1,9 @@
-import router from '../utils/router';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
+import express from 'express';
+const router = express.Router();
 
-export default router.post('/', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   passport.authenticate(
     'login',
     async (err, user) => {
@@ -32,3 +33,5 @@ export default router.post('/', async (req, res, next) => {
     },
   )(req, res, next);
 });
+
+module.exports = router;

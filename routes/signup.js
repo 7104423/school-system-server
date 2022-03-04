@@ -1,7 +1,8 @@
-import router from '../utils/router';
 import passport from 'passport';
+import express from 'express';
+const router = express.Router();
 
-export default router.post(
+router.post(
   '/',
   passport.authenticate('signup', { session: false }),
   async (req, res) => {
@@ -11,3 +12,5 @@ export default router.post(
     });
   },
 );
+
+module.exports = router;

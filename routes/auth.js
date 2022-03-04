@@ -1,6 +1,7 @@
-import router from '../utils/router';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
+import express from 'express';
+const router = express.Router();
 
 router.get(
   '/google',
@@ -46,4 +47,4 @@ router.get(
   },
 );
 
-export default router;
+module.exports = router;

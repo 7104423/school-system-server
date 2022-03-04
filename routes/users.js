@@ -1,5 +1,8 @@
-import router from "../utils/router";
+import express from 'express';
+const router = express.Router();
 
-export default router.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.send('respond with a resource');
 });
+
+module.exports = router;
