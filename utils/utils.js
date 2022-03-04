@@ -18,7 +18,7 @@ const checkLoggedIn = (req, res, next) => {
 };
 
 const logOut = (req, res, next) => {
-  if (req.isAuthenticated()) {
+  if (!req.isAuthenticated()) {
     return next();
   }
   req.logOut();
