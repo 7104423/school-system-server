@@ -4,11 +4,10 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const passport = require('passport');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const router = require('./routes/_router');
-const secureRoute = require('./routes/secureRoute/_router');
+const secureRoute = require('./routes/app/_router');
 
 // App config
 const app = express();
@@ -36,13 +35,12 @@ if (!db) {
   console.log('Db connected successfully');
 }
 
-// Router
-router(app);
-
 // Auth
 require('./utils/auth');
 
-app.use('/user', passport.authenticate('jwt', { session: false }), secureRoute);
+// Router
+router(app);
+secureRoute(app);
 
 // eslint-disable-next-line no-console
 console.log('Application runs on: http://localhost:3000/');
