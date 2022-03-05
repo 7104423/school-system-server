@@ -5,7 +5,6 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import cors from 'cors';
 import path from 'path';
 import router from './routes/_router';
 import secureRoute from './routes/app/_router';
@@ -18,7 +17,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+
+// Cors
+const cors = require('cors');
+app.use(cors({
+  origin: ['http://localhost:3001', 'http://127.0.0.1:3001'],
+  credentials: true
+}));
 
 // Body parser
 app.use(bodyParser.urlencoded({

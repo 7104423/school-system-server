@@ -1,4 +1,5 @@
 import fs from 'fs';
+import jwt from 'jsonwebtoken';
 
 export const checkAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -39,3 +40,22 @@ export const getRoutes = (directoryPath) => new Promise((resolve, reject) => {
     }
   });
 });
+
+export const authorize = (user) => {
+  return (req, res, next) => {
+    return req.login(
+      user,
+      { session: false },
+      async (error) => {
+        if (error) {
+          return next(error);
+        }
+
+        // eslint-disable-next-line no-underscore-dangle
+        const body = { _id: user._id, email: user.email };
+        const token = jwt.sign({ user: body }, process.env.JWT_SECRET);
+        return res.json({ token });
+      },
+    );
+  }
+}
