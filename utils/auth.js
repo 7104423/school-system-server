@@ -1,6 +1,6 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as JWTstrategy } from 'passport-jwt';
+import { Strategy as JWTstrategy, ExtractJwt } from 'passport-jwt';
 import { OAuth2Client } from 'google-auth-library';
 import UserModel from '../model/user.model';
 
@@ -82,7 +82,7 @@ export default () => {
     new JWTstrategy(
       {
         secretOrKey: process.env.JWT_SECRET,
-        jwtFromRequest: (req) => (req && req.cookies ? req.cookies.jwt : null),
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       },
       async (token, done) => {
         try {
