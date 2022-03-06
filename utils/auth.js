@@ -4,8 +4,6 @@ import { Strategy as JWTstrategy, ExtractJwt } from 'passport-jwt';
 import { OAuth2Client } from 'google-auth-library';
 import UserModel from '../model/user.model';
 
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
-
 export default () => {
   passport.use(
     'signup',
@@ -33,6 +31,7 @@ export default () => {
         passwordField: 'password',
       },
       async (email, password, done) => {
+        console.log('accessToken');
         try {
           const user = await UserModel.findOne({ email });
 
@@ -56,26 +55,26 @@ export default () => {
 
   passport.use(
     'google',
-    new LocalStrategy({
-      usernameField: 'email',
-      passwordField: 'accessToken'
-    },
-      async (email, accessToken, done) => {
+    new LocalStrategy(
+      {
+        usernameField: 'email',
+        passwordField: 'password',
+      },
+      async (email, password, done) => {
         try {
-          const { payload: { email } } = await googleClient.verifyIdToken({
-            idToken: accessToken,
+          const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+          await googleClient.verifyIdToken({
+            idToken: password,
             audience: process.env.GOOGLE_CLIENT_ID,
-          });
+          })
           const user = await UserModel.findOne({ email });
-          if (!user) {
-            const password = crypto.randomBytes(64).toString('hex');
-            user = await UserModel.create({ email, password });
-          }
-          done(null, user);
+          return done(null, user);
         } catch (error) {
-          done(error);
+          console.log(error.message);
+          return done(error, false, { message: 'Failed to log' });
         }
-      })
+      },
+    ),
   );
 
   passport.use(
