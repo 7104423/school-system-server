@@ -70,8 +70,7 @@ export default () => {
           const user = await UserModel.findOne({ email });
           return done(null, user);
         } catch (error) {
-          console.log(error.message);
-          return done(error, false, { message: 'Failed to log' });
+          return done(error, false, { message: 'Incorrect Google token' });
         }
       },
     ),
