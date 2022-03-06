@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Cors
 const cors = require('cors');
 app.use(cors({
-  origin: ['http://localhost:3001', 'http://127.0.0.1:3001'],
+  origin: '*',
   credentials: true
 }));
 
