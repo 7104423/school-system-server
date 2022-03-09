@@ -1,4 +1,3 @@
-import passport from "passport";
 import { Router } from "express";
 import { signup } from "../utils";
 

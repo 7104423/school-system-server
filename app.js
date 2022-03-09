@@ -9,9 +9,10 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JWTstrategy, ExtractJwt } from "passport-jwt";
 import { OAuth2Client } from "google-auth-library";
-import { UserModel } from "./model";
-import router from "./routes/_router";
-import secureRoute from "./routes/app/_router";
+import { UserModel } from "./src/model";
+import router from "./src/controller/_router";
+import secureRoute from "./src/controller/app/_router";
+import { authenticate, getRoutes } from "./src/utils";
 
 require("dotenv").config();
 
@@ -141,8 +142,19 @@ passport.use(
 );
 
 // Router
-router(app);
-secureRoute(app);
+const routes = await getRoutes(`${path.join(__dirname)}/src/controller`);
+routes.forEach(async ([route, routeFilePromise]) => {
+  const { default: routeObj } = await routeFilePromise;
+  app.use(`/${route}`, routeObj);
+});
+
+const securedRoutes = await getRoutes(
+  `${path.join(__dirname)}/src/controller/secured`,
+);
+securedRoutes.forEach(async ([route, routeFilePromise]) => {
+  const { default: routeObj } = await routeFilePromise;
+  app.use(`/app/${route}`, authenticate(), routeObj);
+});
 
 // eslint-disable-next-line no-console
 console.log("Application runs on: http://localhost:3000/");
