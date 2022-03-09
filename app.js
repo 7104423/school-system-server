@@ -9,7 +9,7 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JWTstrategy, ExtractJwt } from "passport-jwt";
 import { OAuth2Client } from "google-auth-library";
-import { fs } from "fs";
+import fs from "fs";
 import { UserModel } from "./src/model";
 import { authenticate } from "./src/utils";
 
@@ -152,19 +152,23 @@ const getRoutes = async directoryPath => {
     .map(file => [file.replace(".js", ""), import(`${directoryPath}/${file}`)]);
 };
 
-const routes = await getRoutes(`${path.join(__dirname)}/src/controller`);
-routes.forEach(async ([route, routeFilePromise]) => {
-  const { default: routeObj } = await routeFilePromise;
-  app.use(`/${route}`, routeObj);
-});
+(async () => {
+  const routes = await getRoutes(`${path.join(__dirname)}/src/controller`);
+  routes.forEach(async ([route, routeFilePromise]) => {
+    const { default: routeObj } = await routeFilePromise;
+    app.use(`/${route}`, routeObj);
+  });
+})();
 
-const securedRoutes = await getRoutes(
-  `${path.join(__dirname)}/src/controller/secured`,
-);
-securedRoutes.forEach(async ([route, routeFilePromise]) => {
-  const { default: routeObj } = await routeFilePromise;
-  app.use(`/app/${route}`, authenticate(), routeObj);
-});
+(async () => {
+  const securedRoutes = await getRoutes(
+    `${path.join(__dirname)}/src/controller/_secured`,
+  );
+  securedRoutes.forEach(async ([route, routeFilePromise]) => {
+    const { default: routeObj } = await routeFilePromise;
+    app.use(`/app/${route}`, authenticate(), routeObj);
+  });
+})();
 
 // eslint-disable-next-line no-console
 console.log("Application runs on: http://localhost:3000/");
