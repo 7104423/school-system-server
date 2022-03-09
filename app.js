@@ -9,10 +9,9 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JWTstrategy, ExtractJwt } from "passport-jwt";
 import { OAuth2Client } from "google-auth-library";
+import { fs } from "fs";
 import { UserModel } from "./src/model";
-import router from "./src/controller/_router";
-import secureRoute from "./src/controller/app/_router";
-import { authenticate, getRoutes } from "./src/utils";
+import { authenticate } from "./src/utils";
 
 require("dotenv").config();
 
@@ -142,6 +141,17 @@ passport.use(
 );
 
 // Router
+/**
+ * @param {string} directoryPath
+ * @returns {Promise}
+ */
+const getRoutes = async directoryPath => {
+  const files = await fs.promises.readdir(directoryPath);
+  return files
+    .filter(file => !file.startsWith("_") && file.endsWith(".js"))
+    .map(file => [file.replace(".js", ""), import(`${directoryPath}/${file}`)]);
+};
+
 const routes = await getRoutes(`${path.join(__dirname)}/src/controller`);
 routes.forEach(async ([route, routeFilePromise]) => {
   const { default: routeObj } = await routeFilePromise;
