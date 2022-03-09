@@ -1,18 +1,32 @@
-export default {
+module.exports = {
   env: {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'airbnb-base',
-  ],
+  extends: ["airbnb-base", "plugin:prettier/recommended"],
   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
+    ecmaVersion: "latest",
+    sourceType: "module",
   },
+  plugins: ["prettier"],
   rules: {
-    'linebreak-style': ['off'],
-    'max-len': ['error', { code: 80, tabWidth: 2 }],
-    'func-names': ['off'],
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+        singleQuote: false,
+        trailingComma: "all",
+        arrowParens: "avoid",
+        printWidth: 80,
+        bracketSpacing: true,
+        jsxBracketSameLine: true,
+      },
+      {
+        usePrettierrc: true,
+      },
+    ],
+    "func-names": "off",
+    "import/prefer-default-export": "off",
+    "no-use-before-define": "off",
   },
 };

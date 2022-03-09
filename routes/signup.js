@@ -1,13 +1,14 @@
-import passport from 'passport';
-import express from 'express';
+const passport = require("passport");
+const express = require("express");
+
 const router = express.Router();
 
 router.post(
-  '/',
-  passport.authenticate('signup', { session: false }),
+  "/",
+  passport.authenticate("signup", { session: false }),
   async (req, res) => {
     res.json({
-      message: 'Signup successful',
+      message: "Signup successful",
       user: req.user,
     });
   },

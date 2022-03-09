@@ -1,16 +1,16 @@
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as JWTstrategy, ExtractJwt } from 'passport-jwt';
-import { OAuth2Client } from 'google-auth-library';
-import UserModel from '../model/user.model';
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as JWTstrategy, ExtractJwt } from "passport-jwt";
+import { OAuth2Client } from "google-auth-library";
+import { UserModel } from "../model";
 
 export default () => {
   passport.use(
-    'signup',
+    "signup",
     new LocalStrategy(
       {
-        usernameField: 'email',
-        passwordField: 'password',
+        usernameField: "email",
+        passwordField: "password",
       },
       async (email, password, done) => {
         try {
@@ -24,41 +24,40 @@ export default () => {
   );
 
   passport.use(
-    'login',
+    "login",
     new LocalStrategy(
       {
-        usernameField: 'email',
-        passwordField: 'password',
+        usernameField: "email",
+        passwordField: "password",
       },
       async (email, password, done) => {
-        console.log('accessToken');
         try {
           const user = await UserModel.findOne({ email });
 
           if (!user) {
-            return done(null, false, { message: 'User not found' });
+            return done(null, false, { message: "User not found" });
           }
 
           const validate = await user.isValidPassword(password);
 
           if (!validate) {
-            return done(null, false, { message: 'Wrong Password' });
+            return done(null, false, { message: "Wrong Password" });
           }
 
-          return done(null, user, { message: 'Logged in Successfully' });
+          return done(null, user, { message: "Logged in Successfully" });
         } catch (error) {
-          return done(error);
+          return done(error, false, error.message);
         }
       },
     ),
   );
 
   passport.use(
-    'google',
+    "google",
     new LocalStrategy(
       {
-        usernameField: 'email',
-        passwordField: 'password',
+        usernameField: "email",
+        passwordField: "password",
       },
       async (email, password, done) => {
         try {
@@ -66,11 +65,11 @@ export default () => {
           await googleClient.verifyIdToken({
             idToken: password,
             audience: process.env.GOOGLE_CLIENT_ID,
-          })
+          });
           const user = await UserModel.findOne({ email });
           return done(null, user);
         } catch (error) {
-          return done(error, false, { message: 'Incorrect Google token' });
+          return done(error, false, { message: "Incorrect Google token" });
         }
       },
     ),
@@ -91,4 +90,4 @@ export default () => {
       },
     ),
   );
-}
+};

@@ -1,9 +1,8 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+import mongoose, { Schema } from "mongoose";
+import bcrypt from "bcrypt";
+import { GroupSchema } from "./group.model";
 
-const { Schema } = mongoose;
-
-const UserSchema = new Schema({
+export const UserSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -13,21 +12,16 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  groups: [GroupSchema],
 });
 
-UserSchema.pre(
-  'save',
-  async function (next) {
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
-  },
-);
+UserSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
 
-UserSchema.methods.isValidPassword = async function (password) {
-  const compare = await bcrypt.compare(password, this.password);
-  return compare;
+UserSchema.methods.isValidPassword = function (password) {
+  return bcrypt.compare(password, this.password);
 };
 
-const UserModel = mongoose.model('user', UserSchema);
-
-module.exports = UserModel;
+export const UserModel = mongoose.model("User", UserSchema);
