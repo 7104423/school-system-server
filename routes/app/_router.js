@@ -1,14 +1,10 @@
 import path from "path";
-import passport from "passport";
-import { getRoutes } from "../../utils/utils";
+import { authenticate, getRoutes } from "../../utils";
 
 export default async app => {
   const routes = await getRoutes(path.join(__dirname));
-  routes.forEach(([route, routeObj]) => {
-    app.use(
-      `/app/${route}`,
-      passport.authenticate("jwt", { session: false }),
-      routeObj,
-    );
+  routes.forEach(async ([route, routeFilePromise]) => {
+    const { default: routeObj } = await routeFilePromise;
+    app.use(`/app/${route}`, authenticate(), routeObj);
   });
 };

@@ -1,16 +1,10 @@
-const express = require("express");
-const passport = require("passport");
-const { availableFor } = require("../utils/middlewares");
+import { Router } from "express";
+import { authenticate, availableFor } from "../utils";
 
-const router = express.Router();
+const router = Router();
 
-router.get(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  availableFor(["STUDENT"]),
-  (req, res) => {
-    res.json({ message: "This section is available only for students" });
-  },
-);
+router.get("/", authenticate(), availableFor(["STUDENT"]), (req, res) => {
+  res.json({ message: "This section is available only for students" });
+});
 
-module.exports = router;
+export default router;

@@ -1,8 +1,8 @@
-const passport = require("passport");
-const express = require("express");
-const { authorize } = require("../utils/utils");
+import passport from "passport";
+import { Router } from "express";
+import { authorize } from "../utils";
 
-const router = express.Router();
+const router = Router();
 
 router.post("/", async (req, res, next) => {
   passport.authenticate("login", async (err, user) => {
@@ -32,4 +32,4 @@ router.post("/google", async (req, res, next) => {
   })(req, res, next);
 });
 
-module.exports = router;
+export default router;

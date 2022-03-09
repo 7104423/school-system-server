@@ -5,9 +5,13 @@ import logger from "morgan";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import path from "path";
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as JWTstrategy, ExtractJwt } from "passport-jwt";
+import { OAuth2Client } from "google-auth-library";
+import { UserModel } from "./model";
 import router from "./routes/_router";
 import secureRoute from "./routes/app/_router";
-import auth from "./utils/auth";
 
 require("dotenv").config();
 
@@ -50,7 +54,91 @@ if (!db) {
 }
 
 // Auth
-auth();
+passport.use(
+  "signup",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+    },
+    async (email, password, done) => {
+      try {
+        const user = await UserModel.create({ email, password });
+        return done(null, user);
+      } catch (error) {
+        return done(error);
+      }
+    },
+  ),
+);
+
+passport.use(
+  "login",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+    },
+    async (email, password, done) => {
+      try {
+        const user = await UserModel.findOne({ email });
+
+        if (!user) {
+          return done(null, false, { message: "User not found" });
+        }
+
+        const validate = await user.isValidPassword(password);
+
+        if (!validate) {
+          return done(null, false, { message: "Wrong Password" });
+        }
+
+        return done(null, user, { message: "Logged in Successfully" });
+      } catch (error) {
+        return done(error, false, error.message);
+      }
+    },
+  ),
+);
+
+passport.use(
+  "google",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "idToken",
+    },
+    async (email, idToken, done) => {
+      try {
+        const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+        await googleClient.verifyIdToken({
+          idToken,
+          audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const user = await UserModel.findOne({ email });
+        return done(null, user);
+      } catch (error) {
+        return done(error, false, { message: "Incorrect Google token" });
+      }
+    },
+  ),
+);
+
+passport.use(
+  new JWTstrategy(
+    {
+      secretOrKey: process.env.JWT_SECRET,
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    },
+    async (token, done) => {
+      try {
+        return done(null, token.user);
+      } catch (error) {
+        return done(error);
+      }
+    },
+  ),
+);
 
 // Router
 router(app);

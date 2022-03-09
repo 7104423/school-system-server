@@ -1,17 +1,14 @@
-const passport = require("passport");
-const express = require("express");
+import passport from "passport";
+import { Router } from "express";
+import { signup } from "../utils";
 
-const router = express.Router();
+const router = Router();
 
-router.post(
-  "/",
-  passport.authenticate("signup", { session: false }),
-  async (req, res) => {
-    res.json({
-      message: "Signup successful",
-      user: req.user,
-    });
-  },
-);
+router.post("/", signup(), async (req, res) => {
+  res.json({
+    message: "Signup successful",
+    user: req.user,
+  });
+});
 
-module.exports = router;
+export default router;
