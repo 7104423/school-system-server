@@ -109,6 +109,6 @@ export class UserDAO {
    */
   async isValidPassword(password) {
     // @ts-ignore
-    return UserModel.findById(this.id).isValidPassword(password);
+    return UserModel.findById(this.id)?.isValidPassword(password);
   }
 }
