@@ -3,7 +3,7 @@ import passport from "passport";
 import { UserDAO } from "../dao/user.dao";
 
 /**
- * @param {Array.<'STUDENT' | 'TEACHER' | 'ADMIN'>} groups
+ * @param {Array<'STUDENT' | 'TEACHER' | 'ADMIN'>} groups
  * @returns {(req, res, next) => Promise}
  */
 export const availableFor = (groups = []) => {
