@@ -10,8 +10,8 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JWTstrategy, ExtractJwt } from "passport-jwt";
 import { OAuth2Client } from "google-auth-library";
 import fs from "fs";
-import { UserModel } from "./src/model";
 import { authenticate } from "./src/utils";
+import { UserDAO } from "./src/dao/user.dao";
 
 require("dotenv").config();
 
@@ -63,7 +63,7 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const user = await UserModel.create({ email, password });
+        const user = await UserDAO.create({ email, password });
         return done(null, user);
       } catch (error) {
         return done(error);
@@ -81,7 +81,7 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const user = await UserModel.findOne({ email });
+        const user = await UserDAO.findByEmail(email);
 
         if (!user) {
           return done(null, false, { message: "User not found" });
@@ -115,7 +115,7 @@ passport.use(
           idToken,
           audience: process.env.GOOGLE_CLIENT_ID,
         });
-        const user = await UserModel.findOne({ email });
+        const user = await UserDAO.findByEmail(email);
         return done(null, user);
       } catch (error) {
         return done(error, false, { message: "Incorrect Google token" });
