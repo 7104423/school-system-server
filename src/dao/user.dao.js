@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import { Express } from "express";
+import { User } from "express";
 import { UserModel } from "../model";
 import { GroupTypes } from "../types";
 
-export class UserDAO extends Express.User {
+export class UserDAO extends User {
 
   /**
    * @param {{
