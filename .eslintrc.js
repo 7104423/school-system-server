@@ -3,12 +3,16 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ["airbnb-base", "plugin:prettier/recommended"],
+  extends: [
+    "airbnb-base",
+    "plugin:prettier/recommended",
+    "plugin:jsdoc/recommended",
+  ],
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["prettier"],
+  plugins: ["prettier", "jsdoc"],
   rules: {
     "prettier/prettier": [
       "error",
@@ -29,5 +33,6 @@ module.exports = {
     "import/prefer-default-export": "off",
     "no-use-before-define": "off",
     "no-unused-vars": "off",
+    "jsdoc/require-param-description": false,
   },
 };

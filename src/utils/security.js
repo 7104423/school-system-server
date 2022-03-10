@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import passport from "passport";
 import { UserDAO } from "../dao/user.dao";
 import { AuthorizeProps, GroupTypes } from "../types";
+import { Request, Response, NextFunction } from "express";
 
 /**
  * @param {GroupTypes} groups
@@ -19,7 +20,7 @@ export const availableFor = (groups = []) => {
 
 /**
  * @param {AuthorizeProps} user
- * @returns {(req, res, next) => Promise}
+ * @returns {(req:Request, res: Response, next:NextFunction ) => Promise<any>}
  */
 export const authorize = user => {
   return (req, res, next) => {
@@ -28,7 +29,6 @@ export const authorize = user => {
         return next(error);
       }
 
-      // eslint-disable-next-line no-underscore-dangle
       const body = { id: user.id, email: user.email };
       const token = jwt.sign({ user: body }, process.env.JWT_SECRET);
       return res.json({ token });
@@ -37,7 +37,7 @@ export const authorize = user => {
 };
 
 /**
- * @returns {(req, res, next) => Promise}
+ * @returns {(req:Request, res: Response, next:NextFunction ) => Promise<any>}
  */
 export const authenticate = () => {
   return passport.authenticate("jwt", { session: false });

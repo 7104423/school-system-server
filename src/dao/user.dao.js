@@ -1,13 +1,36 @@
 import mongoose from "mongoose";
+import { Express } from "express";
 import { UserModel } from "../model";
 import { GroupTypes } from "../types";
 
-export class UserDAO {
+export class UserDAO extends Express.User {
+
+  /**
+   * @param {{
+   *  id?: string,
+   *  _id?: string,
+   *  email?: string,
+   *  password?: string,
+   *  groups?: GroupTypes
+   * }} param0
+   */
   constructor({ id, _id, email, password, groups }) {
-    this.id = id || _id;
-    this.email = email;
-    this.password = password;
-    this.groups = groups;
+    /**
+     * @type {string}
+     */
+    this.id = id || _id || "";
+    /**
+     * @type {string}
+     */
+    this.email = email || "";
+    /**
+     * @type {string}
+     */
+    this.password = password || "";
+    /**
+     * @type {GroupTypes}
+     */
+    this.groups = groups || [];
   }
 
   /**
@@ -23,7 +46,7 @@ export class UserDAO {
 
   /**
    * @param {string} emailValue
-   * @returns {Promise<UserDAO>}
+   * @returns {Promise<UserDAO | null>}
    */
   static async findByEmail(emailValue) {
     const user = await UserModel.findOne({
@@ -37,7 +60,7 @@ export class UserDAO {
 
   /**
    * @param {string} id
-   * @returns {Promise<UserDAO>}
+   * @returns {Promise<UserDAO | null>}
    */
   static async findByID(id) {
     const user = await UserModel.findOne({
