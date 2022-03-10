@@ -2,17 +2,17 @@ import jwt from "jsonwebtoken";
 import passport from "passport";
 import { UserDAO } from "../dao/user.dao";
 import { AuthorizeProps, GroupTypes } from "../types";
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, Express } from "express";
 
 /**
  * @param {GroupTypes[]} groups
- * @returns {(req, res, next) => Promise}
+ * @returns {(req: Request, res: Response, next: NextFunction) => Promise}
  */
 export const availableFor = (groups = []) => {
   return async (req, res, next) => {
-    const user = await UserDAO.findByID(req?.user?.id);
-    if (!user && !(await user.hasGroup(groups))) {
-      return res.json({ status: "failed" });
+    const user = UserDAO.getSessionUser(req);
+    if (!user || !(await user.hasGroup(groups))) {
+      return res.json({ status: "access denied" });
     }
     return next();
   };
@@ -37,21 +37,21 @@ export const authorize = ({ id, email, ...user }) => {
 };
 
 /**
- * @returns {(req:Request, res: Response, next:NextFunction ) => Promise<any>}
+ * @returns {(req:Request, res: Response, next: NextFunction ) => Promise<any>}
  */
 export const authenticate = () => {
   return passport.authenticate("jwt", { session: false });
 };
 
 /**
- * @returns {(req, res, next) => Promise}
+ * @returns {(req: Request, res: Response, next: NextFunction) => Promise}
  */
 export const signup = () => {
   return passport.authenticate("signup", { session: false });
 };
 
 /**
- * @returns {(req, res, next) => Promise}
+ * @returns {(req: Request, res: Response, next: NextFunction) => Promise}
  */
 export const login = () => {
   return passport.authenticate("login", { session: false });

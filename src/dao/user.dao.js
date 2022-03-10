@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { UserModel } from "../model";
 import { GroupTypes } from "../types";
+import { Request } from "express";
 
 export class UserDAO {
 
@@ -69,6 +70,17 @@ export class UserDAO {
       return null;
     }
     return new this({ ...user });
+  }
+
+  /**
+   * @param {Request} req
+   * @returns {UserDAO | null}
+   */
+  static getSessionUser(req) {
+    if (req.user instanceof UserDAO) {
+      return req.user;
+    }
+    return null;
   }
 
   /**
