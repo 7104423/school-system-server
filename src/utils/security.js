@@ -22,14 +22,14 @@ export const availableFor = (groups = []) => {
  * @param {AuthorizeProps} user
  * @returns {(req:Request, res: Response, next:NextFunction ) => Promise<any>}
  */
-export const authorize = user => {
+export const authorize = ({ id, email, ...user }) => {
   return (req, res, next) => {
     return req.login(user, { session: false }, async error => {
       if (error) {
         return next(error);
       }
 
-      const body = { id: user.id, email: user.email };
+      const body = { id, email };
       const token = jwt.sign({ user: body }, process.env.JWT_SECRET);
       return res.json({ token });
     });
