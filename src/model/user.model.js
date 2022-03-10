@@ -15,6 +15,7 @@ export const UserSchema = new Schema({
   groups: [GroupSchema],
 });
 
+// @ts-ignore
 UserSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, 10);
   next();

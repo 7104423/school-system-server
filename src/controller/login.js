@@ -11,13 +11,14 @@ router.post("/",
    * @param {Request} req
    * @param {Response} res
    * @param {NextFunction} next
+   * @returns {Promise<void>}
    */
   async (req, res, next) => {
     passport.authenticate("login",
       /**
        * @param {Error} err
        * @param {UserDAO | false} user
-       * @returns {NextFunction}
+       * @returns {Promise<void>}
        */
       async (err, user) => {
         try {
@@ -43,7 +44,7 @@ router.post("/google",
       /**
        * @param {Error} err
        * @param {UserDAO | false} user
-       * @returns {NextFunction}
+       * @returns {Promise<void>}
        */
       async (err, user) => {
         try {

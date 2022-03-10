@@ -5,7 +5,7 @@ import { AuthorizeProps, GroupTypes } from "../types";
 import { Request, Response, NextFunction } from "express";
 
 /**
- * @param {GroupTypes} groups
+ * @param {GroupTypes[]} groups
  * @returns {(req, res, next) => Promise}
  */
 export const availableFor = (groups = []) => {
@@ -20,7 +20,7 @@ export const availableFor = (groups = []) => {
 
 /**
  * @param {AuthorizeProps} user
- * @returns {(req:Request, res: Response, next:NextFunction ) => Promise<any>}
+ * @returns {(req:Request, res: Response, next:NextFunction ) => void}
  */
 export const authorize = ({ id, email, ...user }) => {
   return (req, res, next) => {

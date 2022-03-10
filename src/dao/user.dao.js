@@ -10,7 +10,7 @@ export class UserDAO {
    *  _id?: string,
    *  email?: string,
    *  password?: string,
-   *  groups?: GroupTypes
+   *  groups?: GroupTypes[]
    * }} param0
    */
   constructor({ id, _id, email, password, groups }) {
@@ -27,7 +27,7 @@ export class UserDAO {
      */
     this.password = password || "";
     /**
-     * @type {GroupTypes}
+     * @type {GroupTypes[]}
      */
     this.groups = groups || [];
   }
@@ -35,7 +35,7 @@ export class UserDAO {
   /**
    * @param {string} email
    * @param {string} password
-   * @param {string?} groups
+   * @param {GroupTypes[]?} groups
    * @returns {Promise<UserDAO>}
    */
   static async create(email, password, groups = ["STUDENT"]) {
@@ -72,11 +72,11 @@ export class UserDAO {
   }
 
   /**
-   * @param {GroupTypes} groups
+   * @param {GroupTypes[]} groups
    * @returns {Promise<boolean>}
    */
   async hasGroup(groups = []) {
-    const userID = mongoose.Types.ObjectId(this.id);
+    const userID = new mongoose.Types.ObjectId(this.id);
     const user = await UserModel.aggregate([
       {
         $match: { _id: userID },
@@ -96,6 +96,7 @@ export class UserDAO {
    * @returns {Promise<boolean>}
    */
   async isValidPassword(password) {
+    // @ts-ignore
     return UserModel.findById(this.id).isValidPassword(password);
   }
 }

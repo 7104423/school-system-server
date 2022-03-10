@@ -43,6 +43,7 @@ app.use(bodyParser.json());
 
 // DB connect
 // eslint-disable-next-line max-len
+// @ts-ignore
 mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true });
 const db = mongoose.connection;
 if (!db) {
@@ -63,7 +64,7 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const user = await UserDAO.create({ email, password });
+        const user = await UserDAO.create(email, password);
         return done(null, user);
       } catch (error) {
         return done(error);
