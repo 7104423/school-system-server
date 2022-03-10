@@ -41,7 +41,7 @@ export class UserDAO {
         $match: { _id: userID },
       },
       {
-        $match: { groups: { $elemMatch: { name: { $in: groups } } } },
+        $match: { groups: { $elemMatch: { key: { $in: groups } } } },
       },
     ]);
     if (!user) {

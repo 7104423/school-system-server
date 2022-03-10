@@ -6,6 +6,11 @@ export const GroupSchema = new Schema({
     required: true,
     unique: true,
   },
+  key: {
+    type: String,
+    required: true,
+    unique: true,
+  },
 });
 
 export const GroupModel = mongoose.model("group", GroupSchema);
