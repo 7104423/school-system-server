@@ -28,5 +28,6 @@ module.exports = {
     "func-names": "off",
     "import/prefer-default-export": "off",
     "no-use-before-define": "off",
+    "no-unused-vars": "off",
   },
 };

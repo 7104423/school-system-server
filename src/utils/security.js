@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import { UserDAO } from "../dao/user.dao";
+import { AuthorizeProps, GroupTypes } from "../types";
 
 /**
- * @param {Array<'STUDENT' | 'TEACHER' | 'ADMIN'>} groups
+ * @param {GroupTypes} groups
  * @returns {(req, res, next) => Promise}
  */
 export const availableFor = (groups = []) => {
@@ -17,7 +18,7 @@ export const availableFor = (groups = []) => {
 };
 
 /**
- * @param {{id: string, email: string}} user
+ * @param {AuthorizeProps} user
  * @returns {(req, res, next) => Promise}
  */
 export const authorize = user => {
@@ -35,14 +36,23 @@ export const authorize = user => {
   };
 };
 
+/**
+ * @returns {(req, res, next) => Promise}
+ */
 export const authenticate = () => {
   return passport.authenticate("jwt", { session: false });
 };
 
+/**
+ * @returns {(req, res, next) => Promise}
+ */
 export const signup = () => {
   return passport.authenticate("signup", { session: false });
 };
 
+/**
+ * @returns {(req, res, next) => Promise}
+ */
 export const login = () => {
   return passport.authenticate("login", { session: false });
 };
