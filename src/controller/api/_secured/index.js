@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { Request, Response } from "express";
-import { UserDAO } from "../../dao/user.dao";
+import { UserDAO } from "../../../dao/user.dao";
 
 const router = Router();
 
-router.get("/",
+router.get(
+  "/",
   /**
    * @param {Request & {user?: UserDAO}} req
    * @param {Response} res
@@ -14,6 +15,7 @@ router.get("/",
       message: "Signup successful",
       user: req.user,
     });
-  });
+  }
+);
 
 export default router;

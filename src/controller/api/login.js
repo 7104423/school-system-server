@@ -1,12 +1,13 @@
 import passport from "passport";
 import { Router } from "express";
-import { authorize } from "../utils";
-import { UserDAO } from "../dao/user.dao";
+import { authorize } from "../../utils";
+import { UserDAO } from "../../dao/user.dao";
 import { Request, Response, NextFunction } from "express";
 
 const router = Router();
 
-router.post("/",
+router.post(
+  "/",
   /**
    * @param {Request} req
    * @param {Response} res
@@ -14,7 +15,8 @@ router.post("/",
    * @returns {Promise<void>}
    */
   async (req, res, next) => {
-    passport.authenticate("login",
+    passport.authenticate(
+      "login",
       /**
        * @param {Error} err
        * @param {UserDAO | false} user
@@ -30,17 +32,21 @@ router.post("/",
         } catch (error) {
           return next(error);
         }
-      })(req, res, next);
-  });
+      }
+    )(req, res, next);
+  }
+);
 
-router.post("/google",
+router.post(
+  "/google",
   /**
    * @param {Request} req
    * @param {Response} res
    * @param {NextFunction} next
    */
   async (req, res, next) => {
-    passport.authenticate("google",
+    passport.authenticate(
+      "google",
       /**
        * @param {Error} err
        * @param {UserDAO | false} user
@@ -56,7 +62,9 @@ router.post("/google",
         } catch (error) {
           return next(error);
         }
-      })(req, res, next);
-  });
+      }
+    )(req, res, next);
+  }
+);
 
 export default router;

@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { signup } from "../utils";
+import { signup } from "../../utils";
 import { Request, Response } from "express";
 
 const router = Router();
 
-router.post("/", signup(),
+router.post(
+  "/",
+  signup(),
   /**
    * @param {Request} req
    * @param {Response} res
@@ -14,6 +16,7 @@ router.post("/", signup(),
       message: "Signup successful",
       user: req.user,
     });
-  });
+  }
+);
 
 export default router;

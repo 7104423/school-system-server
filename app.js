@@ -12,6 +12,7 @@ import { OAuth2Client } from "google-auth-library";
 import fs from "fs";
 import { authenticate } from "./src/utils";
 import { UserDAO } from "./src/dao/user.dao";
+import AppRouter from "./src/controller/app";
 
 require("dotenv").config();
 
@@ -21,7 +22,6 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 
 // Cors
 const cors = require("cors");
@@ -30,14 +30,14 @@ app.use(
   cors({
     origin: "*",
     credentials: true,
-  }),
+  })
 );
 
 // Body parser
 app.use(
   bodyParser.urlencoded({
     extended: true,
-  }),
+  })
 );
 app.use(bodyParser.json());
 
@@ -69,8 +69,8 @@ passport.use(
       } catch (error) {
         return done(error);
       }
-    },
-  ),
+    }
+  )
 );
 
 passport.use(
@@ -98,8 +98,8 @@ passport.use(
       } catch (error) {
         return done(error, false, error.message);
       }
-    },
-  ),
+    }
+  )
 );
 
 passport.use(
@@ -121,8 +121,8 @@ passport.use(
       } catch (error) {
         return done(error, false, { message: "Incorrect Google token" });
       }
-    },
-  ),
+    }
+  )
 );
 
 passport.use(
@@ -137,8 +137,8 @@ passport.use(
       } catch (error) {
         return done(error);
       }
-    },
-  ),
+    }
+  )
 );
 
 // Router
@@ -146,30 +146,37 @@ passport.use(
  * @param {string} directoryPath
  * @returns {Promise}
  */
-const getRoutes = async directoryPath => {
+const getRoutes = async (directoryPath) => {
   const files = await fs.promises.readdir(directoryPath);
   return files
-    .filter(file => !file.startsWith("_") && file.endsWith(".js"))
-    .map(file => [file.replace(".js", ""), import(`${directoryPath}/${file}`)]);
+    .filter((file) => !file.startsWith("_") && file.endsWith(".js"))
+    .map((file) => [
+      file.replace(".js", ""),
+      import(`${directoryPath}/${file}`),
+    ]);
 };
 
 (async () => {
-  const routes = await getRoutes(`${path.join(__dirname)}/src/controller`);
+  const routes = await getRoutes(`${path.join(__dirname)}/src/controller/api`);
   routes.forEach(async ([route, routeFilePromise]) => {
     const { default: routeObj } = await routeFilePromise;
-    app.use(`/${route}`, routeObj);
+    app.use(`/api/${route}`, routeObj);
   });
 })();
 
 (async () => {
   const securedRoutes = await getRoutes(
-    `${path.join(__dirname)}/src/controller/_secured`,
+    `${path.join(__dirname)}/src/controller/api/_secured`
   );
   securedRoutes.forEach(async ([route, routeFilePromise]) => {
     const { default: routeObj } = await routeFilePromise;
-    app.use(`/app/${route}`, authenticate(), routeObj);
+    app.use(`/api/app/${route}`, authenticate(), routeObj);
   });
 })();
+
+// Built frontend
+app.use(express.static("public"));
+app.use(`/app`, AppRouter);
 
 // eslint-disable-next-line no-console
 console.log("Application runs on: http://localhost:3000/");
