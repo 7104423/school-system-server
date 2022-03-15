@@ -20,13 +20,12 @@ router.post(
       /**
        * @param {Error} err
        * @param {UserDAO | false} user
-       * @returns {Promise<void>}
        */
-      async (err, user) => {
+      async (err, user, { message }) => {
         try {
           if (err || !user) {
             const error = new Error("An error occurred during login.");
-            return next(error);
+            return res.json({ status: 500, message });
           }
           return authorize(user)(req, res, next);
         } catch (error) {

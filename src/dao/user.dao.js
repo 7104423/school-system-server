@@ -2,9 +2,18 @@ import mongoose from "mongoose";
 import { UserModel } from "../model";
 import { GroupTypes } from "../types";
 import { Request } from "express";
+import bcrypt from "bcrypt";
+
+function parseToPlainObject(obj) {
+  return {
+    id: obj._id,
+    email: obj.email,
+    password: obj.password,
+    groups: obj.groups,
+  };
+}
 
 export class UserDAO {
-
   /**
    * @param {{
    *  id?: string,
@@ -55,7 +64,7 @@ export class UserDAO {
     if (!user) {
       return null;
     }
-    return new this({ ...user });
+    return new this(parseToPlainObject(user));
   }
 
   /**
@@ -69,7 +78,7 @@ export class UserDAO {
     if (!user) {
       return null;
     }
-    return new this({ ...user });
+    return new this(parseToPlainObject(user));
   }
 
   /**
@@ -107,8 +116,7 @@ export class UserDAO {
    * @param {string} password
    * @returns {Promise<boolean>}
    */
-  async isValidPassword(password) {
-    // @ts-ignore
-    return UserModel.findById(this.id)?.isValidPassword(password);
+  isValidPassword(password) {
+    return bcrypt.compare(password, this.password);
   }
 }

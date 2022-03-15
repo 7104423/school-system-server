@@ -96,7 +96,8 @@ passport.use(
 
         return done(null, user, { message: "Logged in Successfully" });
       } catch (error) {
-        return done(error, false, error.message);
+        console.log(error);
+        return done(error, false, { message: error.message });
       }
     }
   )
