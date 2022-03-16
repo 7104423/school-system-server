@@ -24,8 +24,8 @@ router.post(
       async (err, user, { message }) => {
         try {
           if (err || !user) {
-            const error = new Error("An error occurred during login.");
-            return res.json({ status: 500, message });
+            res.status(400);
+            return res.json({ status: 400, message });
           }
           return authorize(user)(req, res, next);
         } catch (error) {
