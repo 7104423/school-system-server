@@ -1,3 +1,7 @@
+/**
+ * Read https://ajv.js.org/guide/getting-started.html for
+ * schema generation
+ */
 import { ajvUtils } from "../utils/ajv";
 
 const validateCreateSchema = {
