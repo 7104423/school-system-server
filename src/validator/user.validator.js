@@ -21,6 +21,7 @@ const validateCreateSchema = {
 
 /**
  * @param {any} data
+ * @returns {boolean}
  */
 export const validateCreate = (data) => {
   return ajvUtils.compile(validateCreateSchema)(data);
