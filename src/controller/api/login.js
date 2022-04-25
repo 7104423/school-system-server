@@ -42,6 +42,7 @@ router.post(
    * @param {Request} req
    * @param {Response} res
    * @param {NextFunction} next
+   * @returns {Promise<void>}
    */
   async (req, res, next) => {
     passport.authenticate(
@@ -49,13 +50,12 @@ router.post(
       /**
        * @param {Error} err
        * @param {UserDAO | false} user
-       * @returns {Promise<void>}
        */
       async (err, user) => {
         try {
           if (err || !user) {
-            const error = new Error("An error occurred during login.");
-            return next(error);
+            res.status(400);
+            return res.json({ status: 400, message: "User does not exist" });
           }
           return authorize(user)(req, res, next);
         } catch (error) {
