@@ -50,10 +50,7 @@ export class StudyProgrammeDAO {
         if (!array) {
             return null;
         }
-
-        // @TODO: check this
-        const result = array.map((obj) => parseToPlainObject(obj));
-
+        const result = array.map((obj) =>  new this(parseToPlainObject(obj)));
         return result;
     }
 
