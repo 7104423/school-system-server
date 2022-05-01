@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { UserModel } from "../model";
+import { GroupModel, UserModel } from "../model";
 import { GroupTypes } from "../types";
 import { Request } from "express";
 import bcrypt from "bcrypt";
@@ -64,7 +64,10 @@ export class UserDAO {
    * @returns {Promise<UserDAO>}
    */
   static async create(email, password, groups = ["STUDENT"]) {
-    await UserModel.create({ email, password });
+    const relatedGroups = await Promise.all(
+      groups.map((name) => GroupModel.find({ name }))
+    );
+    await UserModel.create({ email, password, groups: relatedGroups });
     return new this({ email, password, groups });
   }
 
