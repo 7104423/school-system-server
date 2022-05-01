@@ -171,7 +171,6 @@ const getRoutes = async (directoryPath) => {
   );
   securedRoutes.forEach(async ([route, routeFilePromise]) => {
     const { default: routeObj } = await routeFilePromise;
-    console.log(`/api/app/${route}`);
     app.use(`/api/app/${route}`, authenticate(), routeObj);
   });
 })();
