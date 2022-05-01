@@ -134,7 +134,9 @@ passport.use(
     },
     async (token, done) => {
       try {
-        return done(null, token.user);
+        const id = token?.user?.id ?? null;
+        const user = await UserDAO.findByID(id);
+        return done(null, user);
       } catch (error) {
         return done(error);
       }
