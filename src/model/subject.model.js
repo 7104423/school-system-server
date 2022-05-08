@@ -17,11 +17,6 @@ export const SubjectSchema = new Schema({
     type: [ObjectId],
     required: true
   },
-  students: {
-    type: [ObjectId],
-    required: true
-  },
-  degree: String,
   language: String,
   studyProgramme: {
     type: ObjectId,

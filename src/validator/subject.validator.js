@@ -23,18 +23,6 @@ const validateCreateSchema = {
         type: "string",
       },
     },
-    students: {
-      type: "array",
-      uniqueItems: true,
-      items: {
-        type: "string",
-      },
-    },
-    degree: {
-      type: "string",
-      minLength: 1,
-      maxLength: 255,
-    },
     language: {
       type: "string",
       minLength: 1,
