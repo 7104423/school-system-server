@@ -9,7 +9,6 @@ export const TopicSchema = new Schema({
     unique: true
   },
   description: String,
-  icon: String,
   subject: {
     type: ObjectId,
     required: true
