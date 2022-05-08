@@ -11,7 +11,7 @@ router.post( "/create", authenticate(), availableFor(["ADMIN", "TEACHER"]), asyn
     result = await ContentDAO.create(req.body)
     res.json( result );
   } catch (error) {
-    res.status(500).json( { error } );
+    res.status(500).json( { message: error.message } );
   }
 } );
 
@@ -21,7 +21,7 @@ router.get( "/:id", authenticate(), availableFor(["ADMIN", "STUDENT", "TEACHER"]
     result = await ContentDAO.get( req.params.id );
     res.json( result );
   } catch ( error ) {
-    res.status(500).json( { error } );
+    res.status(500).json( { message: error.message } );
   }
 } );
 
@@ -32,7 +32,7 @@ router.get( "/list", authenticate(), availableFor(["ADMIN", "STUDENT", "TEACHER"
     result = await ContentDAO.list();
     res.json( result );
   } catch ( error ) {
-    res.status(500).json( { error } );
+    res.status(500).json( { message: error.message } );
   }
 } );
 
@@ -42,7 +42,7 @@ router.post( "/update", authenticate(), availableFor(["ADMIN", "TEACHER"]), asyn
     result = await ContentDAO.update( req.body.id, req.body );
     res.json( result );
   } catch ( error ) {
-    res.status(500).json( { error } );
+    res.status(500).json( { message: error.message } );
   }
 } );
 
@@ -52,7 +52,7 @@ router.post( "/delete", authenticate(), availableFor(["ADMIN", "TEACHER"]), asyn
     result = await ContentDAO.delete(req.body.id);
     res.json( result );
   } catch ( error ) {
-    res.status(500).json( { error } );
+    res.status(500).json( { message: error.message } );
   }
 } );
 
