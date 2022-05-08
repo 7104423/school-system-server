@@ -2,12 +2,16 @@ import { Router } from "express";
 import { authenticate, availableFor } from "../../utils";
 import { Request, Response } from "express";
 import { ContentDAO } from "./../../dao/content.dao.js";
+import { validateCreate, validateUpdate } from "../../validator/content.validator.js";
 
 const router = Router();
 
 router.post( "/create", authenticate(), availableFor(["ADMIN", "TEACHER"]), async ( req, res ) => {
   let result;
   try {
+    if (!validateCreate(req.body)) {
+			throw new Error("Validation failed");
+		}
     result = await ContentDAO.create(req.body)
     res.json( result );
   } catch (error) {
@@ -39,6 +43,9 @@ router.get( "/list", authenticate(), availableFor(["ADMIN", "STUDENT", "TEACHER"
 router.post( "/update", authenticate(), availableFor(["ADMIN", "TEACHER"]), async ( req, res ) => {
   let result;
   try {
+    if (!validateUpdate(req.body)) {
+			throw new Error("Validation failed");
+		}
     result = await ContentDAO.update( req.body.id, req.body );
     res.json( result );
   } catch ( error ) {

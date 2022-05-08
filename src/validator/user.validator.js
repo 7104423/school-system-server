@@ -7,8 +7,24 @@ import { ajvUtils } from "../utils/ajv";
 const validateCreateSchema = {
   type: "object",
   properties: {
+    email: {
+      type: "string",
+    },
+    password: {
+      type: "string",
+    },
+    groups: {
+      type: "string",
+    },
+  },
+  required: ["id", "email", "password"],
+};
+
+const validateUpdateSchema = {
+  type: "object",
+  properties: {
     id: {
-      type: "integer",
+      type: "string",
     },
     email: {
       type: "string",
@@ -29,4 +45,12 @@ const validateCreateSchema = {
  */
 export const validateCreate = (data) => {
   return ajvUtils.compile(validateCreateSchema)(data);
+};
+
+/**
+ * @param {any} data
+ * @returns {boolean}
+ */
+ export const validateUpdate = (data) => {
+  return ajvUtils.compile(validateUpdateSchema)(data);
 };
