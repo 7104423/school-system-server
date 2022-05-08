@@ -6,17 +6,15 @@ function parseToPlainObject(obj) {
         id: obj._id,
         name: obj.name,
         description: obj.description,
-        icon: obj.icon,
         subject: obj.subject
     };
 }
 
 export class TopicDAO {
-    constructor({id, _id = "", name, description, icon, subject}) {
+    constructor({id, _id = "", name, description, subject}) {
         this.id = id || _id || "";
         this.name = name || "";
         this.description = description || "";
-        this.icon = icon || "";
         this.subject = subject || "";
     }
 
@@ -27,7 +25,6 @@ export class TopicDAO {
         let topic = {
             name: data.name,
             description: data.description,
-            icon: data.icon,
             subject: data.subject
         }
         const result = await TopicModel.create(topic);
@@ -64,7 +61,6 @@ export class TopicDAO {
         let topic = {
             name: data.name,
             description: data.description,
-            icon: data.icon,
             subject: data.subject           
         }
         const result = await TopicModel.findByIdAndUpdate(id, topic, {returnDocument: "after"});

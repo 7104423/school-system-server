@@ -11,10 +11,6 @@ const validateCreateSchema = {
       type: "string",
       maxLength: 16000,
     },
-    icon: {
-      type: "string",
-      maxLength: 200,
-    },
     subject: {
       type: "string",
       maxLength: 200,
