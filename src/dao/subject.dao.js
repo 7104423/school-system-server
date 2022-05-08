@@ -8,22 +8,18 @@ function parseToPlainObject(obj) {
         goal: obj.goal,
         supervisor: obj.supervisor,
         teachers: obj.teachers,
-        students: obj.students,
-        degree: obj.degree,
         language: obj.language,
         studyProgramme: obj.studyProgramme
     };
 }
 
 export class SubjectDAO {
-    constructor({id, _id = "", name, goal, supervisor, teachers, students, degree, language, studyProgramme}) {
+    constructor({id, _id = "", name, goal, supervisor, teachers, language, studyProgramme}) {
         this.id = id || _id || "";
         this.name = name || "";
         this.goal = goal || "";
         this.supervisor = supervisor || "";
         this.teachers = teachers || [];
-        this.students = students || [];
-        this.degree = degree || "";
         this.language = language || "";
         this.studyProgramme = studyProgramme || "";
     }
@@ -37,8 +33,6 @@ export class SubjectDAO {
             goal: data.goal,
             supervisor: data.supervisor,
             teachers: data.teachers,
-            students: data.students,
-            degree: data.degree,
             language: data.language,
             studyProgramme: data.studyProgramme
         }
@@ -78,8 +72,6 @@ export class SubjectDAO {
             goal: data.goal,
             supervisor: data.supervisor,
             teachers: data.teachers,
-            students: data.students,
-            degree: data.degree,
             language: data.language,
             studyProgramme: data.studyProgramme           
         }
