@@ -1,6 +1,4 @@
-//import { ajvUtils } from "../utils/ajv.js";
-import Ajv from "ajv";
-const ajvUtils = new Ajv();
+import { ajvUtils } from "../utils/ajv.js";
 
 const validateCreateSchema = {
   type: "object",
