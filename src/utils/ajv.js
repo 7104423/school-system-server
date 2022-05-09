@@ -1,3 +1,3 @@
-import Ajv from "ajv/dist/jtd";
+import Ajv from "ajv";
 
 export const ajvUtils = new Ajv();

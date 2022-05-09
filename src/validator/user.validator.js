@@ -17,7 +17,7 @@ const validateCreateSchema = {
       type: "string",
     },
   },
-  required: ["id", "email", "password"],
+  required: ["email", "password"],
 };
 
 const validateUpdateSchema = {
