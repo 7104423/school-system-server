@@ -6,6 +6,7 @@ import {
   validateCreate,
   validateUpdate,
 } from "../../validator/subject.validator.js";
+import { TopicDAO } from "../../dao/topic.dao";
 
 const router = Router();
 
@@ -35,6 +36,21 @@ router.get(
     let result;
     try {
       result = await SubjectDAO.list();
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+router.get(
+  "/:id/topics",
+  authenticate(),
+  availableFor(["ADMIN", "STUDENT", "TEACHER"]),
+  async (req, res) => {
+    let result;
+    try {
+      result = await TopicDAO.getSubjects(req.params.id);
       res.json(result);
     } catch (error) {
       res.status(500).json({ message: error.message });
