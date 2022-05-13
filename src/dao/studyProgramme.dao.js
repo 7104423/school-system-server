@@ -38,6 +38,8 @@ export class StudyProgrammeDAO {
       name: data.name,
       description: data.description,
       supervisor: data.supervisor,
+      degree: data.degree,
+      students: data.students
     };
     const result = await StudyProgrammeModel.create(studyProgramme);
     return new this(parseToPlainObject(result));

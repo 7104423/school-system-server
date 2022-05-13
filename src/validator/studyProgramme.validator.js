@@ -16,6 +16,16 @@ const validateCreateSchema = {
     supervisor: {
       type: "string",
     },
+    students: {
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "string"
+      }
+    },
+    degree: {
+      type: "string"
+    }
   },
   required: ["name", "supervisor"],
 };
@@ -39,6 +49,16 @@ const validateUpdateSchema = {
     supervisor: {
       type: "string",
     },
+    students: {
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "string"
+      }
+    },
+    degree: {
+      type: "string"
+    }
   },
   required: ["id", "name", "supervisor"],
 };
