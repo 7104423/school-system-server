@@ -27,7 +27,7 @@ const validateCreateSchema = {
       type: "string"
     }
   },
-  required: ["name", "supervisor"],
+  required: ["name", "supervisor", "students", "degree"],
 };
 
 const validateUpdateSchema = {
@@ -60,7 +60,7 @@ const validateUpdateSchema = {
       type: "string"
     }
   },
-  required: ["id", "name", "supervisor"],
+  required: ["id", "name", "supervisor", "students", "degree"],
 };
 
 export const validateCreate = (data) => {

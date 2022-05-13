@@ -6,12 +6,18 @@ export const StudyProgrammeSchema = new Schema({
   name: {
     type: String,
     unique: true,
+    required: true,
   },
   description: String,
-  supervisor: ObjectId,
+  supervisor: {
+    type: ObjectId,
+    ref: "user",
+    required: true,
+  },
   students: {
     type: [ObjectId],
     ref: "user",
+    required: true,
   },
   degree: {
     type: String,
