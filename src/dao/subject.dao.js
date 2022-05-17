@@ -82,7 +82,15 @@ export class SubjectDAO {
    * list all subjects
    */
   static async list() {
-    const array = await SubjectModel.find();
+    const array = await SubjectModel.find()
+      .populate("supervisor", {
+        name: 1,
+        surname: 1,
+      })
+      .populate("studyProgramme", {
+        name: 1,
+        degree: 1,
+      });
     if (!array) {
       return null;
     }
