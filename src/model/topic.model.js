@@ -6,13 +6,14 @@ export const TopicSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   description: String,
   subject: {
     type: ObjectId,
-    required: true
-  }
+    required: true,
+    ref: "subject",
+  },
 });
 
 export const TopicModel = mongoose.model("topic", TopicSchema);

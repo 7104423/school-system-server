@@ -7,15 +7,17 @@ function parseToPlainObject(obj) {
     name: obj.name,
     description: obj.description,
     subject: obj.subject,
+    ...(Array.isArray(obj.contents) ? { contents: obj.contents } : {}),
   };
 }
 
 export class TopicDAO {
-  constructor({ id, _id = "", name, description, subject }) {
+  constructor({ id, _id = "", name, description, subject, contents }) {
     this.id = id || _id || "";
     this.name = name || "";
     this.description = description || "";
     this.subject = subject || "";
+    this.contents = contents || [];
   }
 
   /**
@@ -35,7 +37,9 @@ export class TopicDAO {
    * get topic
    */
   static async get(id) {
-    const result = await TopicModel.findById(id);
+    const result = await TopicModel.findById(id).populate("subject", {
+      name: true,
+    });
     if (!result) {
       return null;
     }
@@ -45,9 +49,22 @@ export class TopicDAO {
   /**
    * Get subjects to the related topic
    */
-  static async getSubjects(id) {
-    const result = await TopicModel.find({ subject: id });
-    console.log(result);
+  static async getSubjectsWithTopics(id) {
+    const result = await TopicModel.aggregate([
+      {
+        $match: {
+          subject: new mongoose.Types.ObjectId(id),
+        },
+      },
+      {
+        $lookup: {
+          from: "contents",
+          localField: "_id",
+          foreignField: "topic",
+          as: "contents",
+        },
+      },
+    ]);
     if (!result) {
       return [];
     }
@@ -58,7 +75,9 @@ export class TopicDAO {
    * list all topics
    */
   static async list() {
-    const array = await TopicModel.find();
+    const array = await TopicModel.find().populate("subject", {
+      name: true,
+    });
     if (!array) {
       return null;
     }

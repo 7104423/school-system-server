@@ -39,7 +39,7 @@ export class StudyProgrammeDAO {
       description: data.description,
       supervisor: data.supervisor,
       degree: data.degree,
-      students: data.students
+      students: data.students,
     };
     const result = await StudyProgrammeModel.create(studyProgramme);
     return new this(parseToPlainObject(result));
@@ -49,7 +49,15 @@ export class StudyProgrammeDAO {
    * get study programme
    */
   static async get(id) {
-    const result = await StudyProgrammeModel.findById(id);
+    const result = await StudyProgrammeModel.findById(id)
+      .populate("supervisor", {
+        name: true,
+        surname: true,
+      })
+      .populate("students", {
+        name: true,
+        surname: true,
+      });
     if (!result) {
       return null;
     }
@@ -60,7 +68,10 @@ export class StudyProgrammeDAO {
    * list all study programmes
    */
   static async list() {
-    const array = await StudyProgrammeModel.find();
+    const array = await StudyProgrammeModel.find().populate("supervisor", {
+      name: true,
+      surname: true,
+    });
     if (!array) {
       return null;
     }

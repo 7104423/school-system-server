@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { authenticate, availableFor } from "../../utils";
-import { Request, Response } from "express";
 import { SubjectDAO } from "./../../dao/subject.dao";
 import {
   validateCreate,
@@ -50,7 +49,7 @@ router.get(
   async (req, res) => {
     let result;
     try {
-      result = await TopicDAO.getSubjects(req.params.id);
+      result = await TopicDAO.getSubjectsWithTopics(req.params.id);
       res.json(result);
     } catch (error) {
       res.status(500).json({ message: error.message });
