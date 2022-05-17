@@ -7,7 +7,7 @@ function parseToPlainObject(obj) {
     name: obj.name,
     description: obj.description,
     subject: obj.subject,
-    ...(Array.isArray(obj.contents) ? { contents: obj.contents } : {}),
+    contents: obj.contents,
   };
 }
 
@@ -49,7 +49,7 @@ export class TopicDAO {
   /**
    * Get subjects to the related topic
    */
-  static async getSubjectsWithTopics(id) {
+  static async getSubjectsWithContents(id) {
     const result = await TopicModel.aggregate([
       {
         $match: {

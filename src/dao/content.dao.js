@@ -84,4 +84,21 @@ export class ContentDAO {
     const result = await ContentModel.findByIdAndDelete(id);
     return new this(parseToPlainObject(result));
   }
+
+  /**
+   * Get subjects to the related topic
+   */
+  static async getBySubject(id) {
+    const result = await ContentModel.aggregate([
+      {
+        $match: {
+          subject: new mongoose.Types.ObjectId(id),
+        },
+      },
+    ]);
+    if (!result) {
+      return [];
+    }
+    return result.map((el) => new this(parseToPlainObject(el)));
+  }
 }
