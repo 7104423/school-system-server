@@ -101,4 +101,21 @@ export class ContentDAO {
     }
     return result.map((el) => new this(parseToPlainObject(el)));
   }
+
+  /**
+   * Get subjects to the related topic
+   */
+  static async getByTopic(id) {
+    const result = await ContentModel.aggregate([
+      {
+        $match: {
+          topic: new mongoose.Types.ObjectId(id),
+        },
+      },
+    ]);
+    if (!result) {
+      return [];
+    }
+    return result.map((el) => new this(parseToPlainObject(el)));
+  }
 }
