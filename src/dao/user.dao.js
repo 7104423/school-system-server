@@ -12,6 +12,7 @@ function parseToPlainObject(obj) {
     surname: obj.surname,
     password: obj.password,
     groups: obj.groups,
+    resetPassword: obj.resetPassword,
   };
 }
 
@@ -25,9 +26,19 @@ export class UserDAO {
    *  surname?: string,
    *  password?: string,
    *  groups?: GroupTypes[]
+   *  resetPassword?: boolean
    * }} param0
    */
-  constructor({ id, _id, email, name, surname, password, groups }) {
+  constructor({
+    id,
+    _id,
+    email,
+    name,
+    surname,
+    password,
+    groups,
+    resetPassword,
+  }) {
     /**
      * @type {string}
      */
@@ -55,6 +66,8 @@ export class UserDAO {
      * @type {GroupTypes[]}
      */
     this.groups = groups || [];
+
+    this.resetPassword = resetPassword || false;
   }
 
   /**

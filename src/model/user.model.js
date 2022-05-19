@@ -20,6 +20,10 @@ export const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  resetPassword: {
+    type: Boolean,
+    default: false,
+  },
   groups: [GroupSchema],
 });
 
