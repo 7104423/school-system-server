@@ -134,7 +134,10 @@ export class UserDAO {
    * delete user
    */
   // @TODO
-
+  static async delete(id) {
+    const result = await UserModel.findByIdAndDelete(id);
+    return new this(parseToPlainObject(result));
+  }
 
   /**
    * @param {Request} req

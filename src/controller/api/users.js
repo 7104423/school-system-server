@@ -48,6 +48,19 @@ router.get(
 // @TODO
 
 // delete
-// @TODO
+router.post(
+  "/delete",
+  authenticate(),
+  availableFor(["ADMIN"]),
+  async (req, res) => {
+    let result;
+    try {
+      result = await UserDAO.delete(req.body.id);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
 
 export default router;
