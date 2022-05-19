@@ -10,7 +10,23 @@ import {
 const router = Router();
 
 // create user
-// @TODO
+router.post(
+  "/create",
+  authenticate(),
+  availableFor(["ADMIN"]),
+  async (req, res) => {
+    let result;
+    try {
+      if (!validateCreate(req.body)) {
+        throw new Error("Validation failed");
+      }
+      result = await UserDAO.create(req.body);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
 
 // list all users
 router.get(

@@ -42,6 +42,7 @@ export class UserDAO {
     /**
      * @type {string}
      */
+    
     this.id = id || _id || "";
     /**
      * @type {string}
@@ -71,17 +72,28 @@ export class UserDAO {
   }
 
   /**
-   * @param {string} email
-   * @param {string} password
-   * @param {GroupTypes[]?} groups
-   * @returns {Promise<UserDAO>}
+   * create user
    */
-  static async create(email, password, groups = ["STUDENT"]) {
+  static async create(user) {
+
+    
     const relatedGroups = await Promise.all(
-      groups.map((name) => GroupModel.find({ name }))
+      user.groups.map((name) => {
+        let result = GroupModel.find({ name });
+        return result;
+      })
     );
-    await UserModel.create({ email, password, groups: relatedGroups });
-    return new this({ email, password, groups });
+    /**
+     * @FIX: Promise.all vyse uklada do relatedGroups "pole polí objektů", proto nasledujici blok kodu odstrani "vnejsi" pole tak, aby bylo vraceno pouze "pole objektů"...
+     */
+    user.groups = [];
+    for ( let i = 0; i < relatedGroups.length; i++ ) {
+      user.groups.push(relatedGroups[i][0])
+    }
+
+
+    const result = await UserModel.create(user);
+    return new this(result);
   }
 
   /**

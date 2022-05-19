@@ -2,6 +2,8 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import { GroupSchema } from "./group.model";
 
+const ObjectId = Schema.Types.ObjectId;
+
 export const UserSchema = new Schema({
   email: {
     type: String,
@@ -24,7 +26,18 @@ export const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  groups: [GroupSchema],
+  groups: {
+    type: [
+      {
+        _id: {
+          type: ObjectId,
+          ref: "groups"
+        },
+        name: String
+      }
+    ],
+    required: true
+  }
 });
 
 // @ts-ignore

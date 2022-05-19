@@ -5,12 +5,7 @@ export const GroupSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-  },
-  key: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+  }
 });
 
 export const GroupModel = mongoose.model("group", GroupSchema);
