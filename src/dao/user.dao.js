@@ -113,6 +113,30 @@ export class UserDAO {
   }
 
   /**
+   * list all users
+   */
+  static async list() {
+    const array = await UserModel.find();
+    if (!array) {
+      return null;
+    }
+    const result = array.map((obj) => new this(parseToPlainObject(obj)));
+    return result;
+  }
+
+  /**
+   * update user
+   */
+  // @TODO
+
+
+  /**
+   * delete user
+   */
+  // @TODO
+
+
+  /**
    * @param {Request} req
    * @returns {UserDAO | null}
    */
