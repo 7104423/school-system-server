@@ -10,11 +10,24 @@ const validateCreateSchema = {
     email: {
       type: "string",
     },
+    name: {
+      type: "string",
+    },
+    surname: {
+      type: "string",
+    },
     password: {
       type: "string",
     },
+    resetPassword: {
+      type: "boolean",
+    },
     groups: {
-      type: "string",
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "string"
+      }
     },
   },
   required: ["email", "password"],
@@ -29,11 +42,24 @@ const validateUpdateSchema = {
     email: {
       type: "string",
     },
+    name: {
+      type: "string",
+    },
+    surname: {
+      type: "string",
+    },
     password: {
       type: "string",
     },
+    resetPassword: {
+      type: "boolean",
+    },
     groups: {
-      type: "string",
+      type: "array",
+      uniqueItems: true,
+      items: {
+        type: "string"
+      }
     },
   },
   required: ["id", "email", "password"],
