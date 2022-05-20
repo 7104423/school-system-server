@@ -9,6 +9,7 @@ export const SubjectSchema = new Schema({
     unique: true,
   },
   goal: String,
+  credits: Number,
   supervisor: {
     type: ObjectId,
     ref: "user",

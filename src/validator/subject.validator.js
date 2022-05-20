@@ -13,6 +13,11 @@ const validateCreateSchema = {
       minLength: 1,
       maxLength: 4000,
     },
+    credits: {
+      type: "number",
+      minimum: 1,
+      maximum: 30
+    },
     supervisor: {
       type: "string",
     },
@@ -50,6 +55,11 @@ const validateUpdateSchema = {
       type: "string",
       minLength: 1,
       maxLength: 4000,
+    },
+    credits: {
+      type: "number",
+      minimum: 0,
+      maximum: 30
     },
     supervisor: {
       type: "string",

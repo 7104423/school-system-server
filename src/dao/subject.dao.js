@@ -6,6 +6,7 @@ function parseToPlainObject(obj) {
     id: obj._id,
     name: obj.name,
     goal: obj.goal,
+    credits: obj.credits,
     supervisor: obj.supervisor,
     teachers: obj.teachers,
     language: obj.language,
@@ -19,6 +20,7 @@ export class SubjectDAO {
     _id = "",
     name,
     goal,
+    credits,
     supervisor,
     teachers,
     language,
@@ -27,6 +29,7 @@ export class SubjectDAO {
     this.id = id || _id || "";
     this.name = name || "";
     this.goal = goal || "";
+    this.credits = credits || 0;
     this.supervisor = supervisor || "";
     this.teachers = teachers || [];
     this.language = language || "";
@@ -40,6 +43,7 @@ export class SubjectDAO {
     let subject = {
       name: data.name,
       goal: data.goal,
+      credits: data.credits,
       supervisor: data.supervisor,
       teachers: data.teachers,
       language: data.language,
@@ -105,6 +109,8 @@ export class SubjectDAO {
     let subject = {
       name: data.name,
       goal: data.goal,
+      credits: data.credits,
+      subject: data.subject,
       supervisor: data.supervisor,
       teachers: data.teachers,
       language: data.language,
