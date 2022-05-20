@@ -12,6 +12,9 @@ export const availableFor = (groups = []) => {
   return async (req, res, next) => {
     const user = UserDAO.getSessionUser(req);
     if (!user || !(await user.hasGroup(groups))) {
+      if (groups.includes("$_CURRENT_USER") && user.id === req.body.id) {
+        next();
+      }
       return res.json({ status: "access denied" });
     }
     return next();
