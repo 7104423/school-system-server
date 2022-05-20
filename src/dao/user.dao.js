@@ -149,7 +149,7 @@ export class UserDAO {
    * list all students
    */
   static async getStudents() {
-    const array = await UserModel.find({ "groups.name": "STUDENTS" });
+    const array = await UserModel.find({ "groups.name": "STUDENT" });
     if (!array) {
       return null;
     }
@@ -163,10 +163,6 @@ export class UserDAO {
   static async update(id, data) {
     
     let user = await UserModel.findOne({ _id: id });
-
-    console.log( user)
-
-    //let updatedUser = ( user, ...data );
 
     let updatedUser = {
       email: data.email,
