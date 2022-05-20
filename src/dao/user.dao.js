@@ -160,7 +160,44 @@ export class UserDAO {
   /**
    * update user
    */
-  // @TODO
+  static async update(id, data) {
+    
+    let user = await UserModel.findOne({ _id: id });
+
+    console.log( user)
+
+    //let updatedUser = ( user, ...data );
+
+    let updatedUser = {
+      email: data.email,
+      name: data.name,
+      surname: data.surname,
+      password: user.password,
+      resetPassword: user.resetPassword,
+      groups: data.groups
+    };
+
+    const relatedGroups = await Promise.all(
+      updatedUser.groups.map((name) => {
+        let result = GroupModel.find({ name });
+        return result;
+      })
+    );
+    /**
+     * @FIX: Promise.all vyse uklada do relatedGroups "pole polí objektů", proto nasledujici blok kodu odstrani "vnejsi" pole tak, aby bylo vraceno pouze "pole objektů"...
+     */
+    updatedUser.groups = [];
+    for (let i = 0; i < relatedGroups.length; i++) {
+      updatedUser.groups.push(relatedGroups[i][0]);
+    }
+
+    const result = await UserModel.findByIdAndUpdate(
+      id,
+      updatedUser,
+      { returnDocument: "after" }
+    );
+    return new this(result);
+  }
 
   /**
    * delete user

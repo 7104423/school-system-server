@@ -48,12 +48,6 @@ const validateUpdateSchema = {
     surname: {
       type: "string",
     },
-    password: {
-      type: "string",
-    },
-    resetPassword: {
-      type: "boolean",
-    },
     groups: {
       type: "array",
       uniqueItems: true,
@@ -62,7 +56,7 @@ const validateUpdateSchema = {
       }
     },
   },
-  required: ["id", "email", "password"],
+  required: ["id", "email"],
 };
 
 /**

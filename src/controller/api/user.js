@@ -93,7 +93,23 @@ router.get(
 );
 
 // update
-// @TODO
+router.post(
+  "/update",
+  authenticate(),
+  availableFor(["ADMIN"]),
+  async (req, res) => {
+    let result;
+    try {
+      if (!validateUpdate(req.body)) {
+        throw new Error("Validation failed");
+      }
+      result = await UserDAO.update(req.body.id, req.body);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
 
 // delete
 router.post(
