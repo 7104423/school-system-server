@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { UserDAO } from "../../dao/user.dao.js";
 import {
   validateCreate,
-  validateUpdate
+  validateUpdate,
 } from "../../validator/user.validator.js";
 
 const router = Router();
@@ -32,11 +32,43 @@ router.post(
 router.get(
   "/list",
   authenticate(),
-  availableFor(["ADMIN"]),
+  availableFor(["ADMIN", "STUDENT", "TEACHER"]),
   async (req, res) => {
     let result;
     try {
       result = await UserDAO.list();
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+// list all teachers
+router.get(
+  "/enum/teachers",
+  authenticate(),
+  availableFor(["ADMIN", "TEACHER"]),
+  async (req, res) => {
+    let result;
+    try {
+      result = await UserDAO.getTeachers();
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+// list all students
+router.get(
+  "/enum/students",
+  authenticate(),
+  availableFor(["ADMIN", "TEACHER"]),
+  async (req, res) => {
+    let result;
+    try {
+      result = await UserDAO.getStudents();
       res.json(result);
     } catch (error) {
       res.status(500).json({ message: error.message });

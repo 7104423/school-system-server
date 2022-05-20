@@ -42,7 +42,7 @@ export class UserDAO {
     /**
      * @type {string}
      */
-    
+
     this.id = id || _id || "";
     /**
      * @type {string}
@@ -75,8 +75,6 @@ export class UserDAO {
    * create user
    */
   static async create(user) {
-
-    
     const relatedGroups = await Promise.all(
       user.groups.map((name) => {
         let result = GroupModel.find({ name });
@@ -87,10 +85,9 @@ export class UserDAO {
      * @FIX: Promise.all vyse uklada do relatedGroups "pole polí objektů", proto nasledujici blok kodu odstrani "vnejsi" pole tak, aby bylo vraceno pouze "pole objektů"...
      */
     user.groups = [];
-    for ( let i = 0; i < relatedGroups.length; i++ ) {
-      user.groups.push(relatedGroups[i][0])
+    for (let i = 0; i < relatedGroups.length; i++) {
+      user.groups.push(relatedGroups[i][0]);
     }
-
 
     const result = await UserModel.create(user);
     return new this(result);
@@ -137,10 +134,37 @@ export class UserDAO {
   }
 
   /**
+   * list all teachers
+   */
+  static async getTeachers() {
+    const array = await UserModel.find({
+      groups: { $in: { name: "TEACHER" } },
+    });
+    if (!array) {
+      return null;
+    }
+    const result = array.map((obj) => new this(parseToPlainObject(obj)));
+    return result;
+  }
+
+  /**
+   * list all students
+   */
+  static async getStudents() {
+    const array = await UserModel.find({
+      groups: { $in: { name: "STUDENT" } },
+    });
+    if (!array) {
+      return null;
+    }
+    const result = array.map((obj) => new this(parseToPlainObject(obj)));
+    return result;
+  }
+
+  /**
    * update user
    */
   // @TODO
-
 
   /**
    * delete user
