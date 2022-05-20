@@ -137,9 +137,7 @@ export class UserDAO {
    * list all teachers
    */
   static async getTeachers() {
-    const array = await UserModel.find({
-      groups: { $in: { name: "TEACHER" } },
-    });
+    const array = await UserModel.find({ "groups.name": "TEACHER" });
     if (!array) {
       return null;
     }
@@ -151,9 +149,7 @@ export class UserDAO {
    * list all students
    */
   static async getStudents() {
-    const array = await UserModel.find({
-      groups: { $in: { name: "STUDENT" } },
-    });
+    const array = await UserModel.find({ "groups.name": "STUDENTS" });
     if (!array) {
       return null;
     }
