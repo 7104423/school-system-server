@@ -157,11 +157,22 @@ export class UserDAO {
     return result;
   }
 
+  static async updatePassword(id, password) {
+    const cryptedPassword = await bcrypt.hash(password, 10);
+    const result = await UserModel.findByIdAndUpdate(
+      id,
+      { password: cryptedPassword, resetPassword: false },
+      {
+        returnDocument: "after",
+      }
+    );
+    return result;
+  }
+
   /**
    * update user
    */
   static async update(id, data) {
-    
     let user = await UserModel.findOne({ _id: id });
 
     let updatedUser = {
@@ -170,7 +181,7 @@ export class UserDAO {
       surname: data.surname,
       password: user.password,
       resetPassword: user.resetPassword,
-      groups: data.groups
+      groups: data.groups,
     };
 
     const relatedGroups = await Promise.all(
@@ -187,11 +198,9 @@ export class UserDAO {
       updatedUser.groups.push(relatedGroups[i][0]);
     }
 
-    const result = await UserModel.findByIdAndUpdate(
-      id,
-      updatedUser,
-      { returnDocument: "after" }
-    );
+    const result = await UserModel.findByIdAndUpdate(id, updatedUser, {
+      returnDocument: "after",
+    });
     return new this(result);
   }
 

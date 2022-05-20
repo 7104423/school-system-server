@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authenticate, availableFor } from "../../utils";
 import { Request, Response } from "express";
 import { UserDAO } from "../../dao/user.dao.js";
+import bcrypt from "bcrypt";
 import {
   validateCreate,
   validateUpdate,
@@ -85,6 +86,23 @@ router.get(
     let result;
     try {
       result = await UserDAO.findByID(req.params.id);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+// update password
+router.post(
+  "/update/password",
+  authenticate(),
+  availableFor(["ADMIN", "$_CURRENT_USER"]),
+  async (req, res) => {
+    let result;
+    try {
+      const { password } = req.body;
+      result = await UserDAO.updatePassword(req.body.id, password);
       res.json(result);
     } catch (error) {
       res.status(500).json({ message: error.message });
