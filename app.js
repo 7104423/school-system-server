@@ -5,11 +5,12 @@ import logger from "morgan";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import path from "path";
+import fs from "fs";
+import { createStream } from "rotating-file-stream";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JWTstrategy, ExtractJwt } from "passport-jwt";
 import { OAuth2Client } from "google-auth-library";
-import fs from "fs";
 import { authenticate } from "./src/utils";
 import { UserDAO } from "./src/dao/user.dao";
 import AppRouter from "./src/controller/app";
@@ -18,10 +19,26 @@ require("dotenv").config();
 
 // App config
 const app = express();
-app.use(logger("dev"));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Logger
+let accessLogStream = createStream(
+  "access.log",
+  {
+    interval: "1d",
+    rotate: 5,
+    path: path.join(__dirname, "logs")
+  }
+);
+
+app.use(logger("dev"));
+app.use(logger(
+  '":date[iso]";":remote-addr";":remote-user";":method :url HTTP/:http-version";":status";":res[content-length]";":user-agent"',
+  { stream: accessLogStream }
+));
 
 // Cors
 const cors = require("cors");
