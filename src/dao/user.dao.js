@@ -211,8 +211,6 @@ export class UserDAO {
       returnDocument: "after",
     });
 
-    console.log(updatedUser, result);
-
     return new this(result);
   }
 
