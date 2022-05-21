@@ -8,6 +8,11 @@ export async function CreateAbl(req, res) {
   if (!req.body.email) {
     return res.status(400).json({ message: "Email is missing." });
   }
+
+  // email have to be string
+  if (typeof req.body.email !== "string") {
+    return res.status(400).json({ message: "Email have to be string." });
+  }
   
   // email is already taken
   if ( await UserDAO.findByEmail(req.body.email) ) {
@@ -24,12 +29,22 @@ export async function CreateAbl(req, res) {
   if (!req.body.name) {
     return res.status(400).json({ message: "Name is missing." });
   }
+
+  // name have to be string
+  if (typeof req.body.name !== "string") {
+    return res.status(400).json({ message: "Name have to be string." });
+  }
   
   // surname is missing
   if (!req.body.surname) {
     return res.status(400).json({ message: "Surname is missing." });
   }
 
+  // surname have to be string
+  if (typeof req.body.surname !== "string") {
+    return res.status(400).json({ message: "Surname have to be string." });
+  }
+  
   // password requirements ???
   let passwordRegexp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,}$/;
   if ( !passwordRegexp.test(req.body.password) ) {
@@ -40,7 +55,12 @@ export async function CreateAbl(req, res) {
   if (req.body.groups.length === 0) {
     return res.status(400).json({ message: "Groups are missing." });
   }
-  
+
+  // groups have to be array
+  if (!Array.isArray(req.body.groups)) {
+    return res.status(400).json({ message: "Groups have to be array." });
+  }
+
   // check groups
   let groups = await GroupDAO.list();
   let groupsParsed = groups.map( (item) => item.name );
