@@ -25,7 +25,7 @@ router.post(
         try {
           if (err || !user) {
             res.status(400);
-            return res.json({ status: 400, message });
+            return res.json({ status: 400, message }).status(400);
           }
           return authorize(user)(req, res, next);
         } catch (error) {

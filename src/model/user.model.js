@@ -21,7 +21,6 @@ export const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
   },
   resetPassword: {
     type: Boolean,
@@ -32,13 +31,13 @@ export const UserSchema = new Schema({
       {
         _id: {
           type: ObjectId,
-          ref: "groups"
+          ref: "groups",
         },
-        name: String
-      }
+        name: String,
+      },
     ],
-    required: true
-  }
+    required: true,
+  },
 });
 
 // @ts-ignore

@@ -3,25 +3,21 @@ import { GroupDAO } from "../../dao/group.dao.js";
 import { validateCreate } from "../../validator/user.validator.js";
 
 export async function CreateAbl(req, res) {
-
   // email is missing
   if (!req.body.email) {
     return res.status(400).json({ message: "Email is missing." });
   }
 
-  // email have to be string
-  if (typeof req.body.email !== "string") {
-    return res.status(400).json({ message: "Email have to be string." });
-  }
-  
   // email is already taken
-  if ( await UserDAO.findByEmail(req.body.email) ) {
-    return res.status(400).json({ message: "Email is already taken. Use other email." });
+  if (await UserDAO.findByEmail(req.body.email)) {
+    return res
+      .status(400)
+      .json({ message: "Email is already taken. Use other email." });
   }
-  
+
   // check email format
   let emailRegexp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-  if ( !emailRegexp.test(req.body.email) ) {
+  if (!emailRegexp.test(req.body.email)) {
     return res.status(400).json({ message: "Bad email format." });
   }
 
@@ -30,11 +26,6 @@ export async function CreateAbl(req, res) {
     return res.status(400).json({ message: "Name is missing." });
   }
 
-  // name have to be string
-  if (typeof req.body.name !== "string") {
-    return res.status(400).json({ message: "Name have to be string." });
-  }
-  
   // surname is missing
   if (!req.body.surname) {
     return res.status(400).json({ message: "Surname is missing." });
@@ -44,37 +35,37 @@ export async function CreateAbl(req, res) {
   if (typeof req.body.surname !== "string") {
     return res.status(400).json({ message: "Surname have to be string." });
   }
-  
+
   // password requirements ???
   let passwordRegexp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,}$/;
-  if ( !passwordRegexp.test(req.body.password) ) {
-    return res.status(400).json({ message: "Bad password format (min 5 characters, min 1 capital letter, min 1 small letter, min 1 digit)." });
+  if (!passwordRegexp.test(req.body.password) && !req.body.thirdPartyIdentity) {
+    return res.status(400).json({
+      message:
+        "Bad password format (min 5 characters, min 1 capital letter, min 1 small letter, min 1 digit).",
+    });
   }
-  
+
   // groups are missing
   if (req.body.groups.length === 0) {
     return res.status(400).json({ message: "Groups are missing." });
   }
 
-  // groups have to be array
-  if (!Array.isArray(req.body.groups)) {
-    return res.status(400).json({ message: "Groups have to be array." });
-  }
-
   // check groups
   let groups = await GroupDAO.list();
-  let groupsParsed = groups.map( (item) => item.name );
+  let groupsParsed = groups.map((item) => item.name);
   let groupValidationFailed = false;
-  req.body.groups.forEach( (item) => {
+  req.body.groups.forEach((item) => {
     if (!groupsParsed.includes(item)) {
       groupValidationFailed = true;
       return;
     }
-  } );
+  });
   if (groupValidationFailed) {
-    return res.status(400).json({ message: `Unsupported role. Supported roles: ${groupsParsed.join(" ")}.` })
+    return res.status(400).json({
+      message: `Unsupported role. Supported roles: ${groupsParsed.join(" ")}.`,
+    });
   }
-      
+
   let result;
   try {
     // ajv validations

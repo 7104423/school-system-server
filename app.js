@@ -25,20 +25,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Logger
-let accessLogStream = createStream(
-  "access.log",
-  {
-    interval: "1d",
-    rotate: 5,
-    path: path.join(__dirname, "logs")
-  }
-);
+let accessLogStream = createStream("access.log", {
+  interval: "1d",
+  rotate: 5,
+  path: path.join(__dirname, "logs"),
+});
 
 app.use(logger("dev"));
-app.use(logger(
-  '":date[iso]";":remote-addr";":remote-user";":method :url HTTP/:http-version";":status";":res[content-length]";":user-agent"',
-  { stream: accessLogStream }
-));
+app.use(
+  logger(
+    '":date[iso]";":remote-addr";":remote-user";":method :url HTTP/:http-version";":status";":res[content-length]";":user-agent"',
+    { stream: accessLogStream }
+  )
+);
 
 // Cors
 const cors = require("cors");
@@ -113,7 +112,6 @@ passport.use(
 
         return done(null, user, { message: "Logged in Successfully" });
       } catch (error) {
-        console.log(error);
         return done(error, false, { message: error.message });
       }
     }

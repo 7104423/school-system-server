@@ -15,7 +15,7 @@ export const availableFor = (groups = []) => {
       if (groups.includes("$_CURRENT_USER") && user.id === req.body.id) {
         next();
       }
-      return res.json({ status: "access denied" });
+      return res.json({ status: 400, message: "Access denied" }).status(400);
     }
     return next();
   };
