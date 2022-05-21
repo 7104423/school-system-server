@@ -7,6 +7,13 @@ import {
 } from "../../validator/subject.validator.js";
 import { TopicDAO } from "../../dao/topic.dao";
 import { ContentDAO } from "../../dao/content.dao";
+import { CreateAbl } from "../../abl/subject/create.abl.js";
+import { ListAbl } from "../../abl/subject/list.abl.js";
+import { GetTopicsAbl } from "../../abl/subject/getTopics.abl.js";
+import { GetContentsAbl } from "../../abl/subject/getContents.abl.js";
+import { GetAbl } from "../../abl/subject/get.abl.js";
+import { UpdateAbl } from "../../abl/subject/update.abl.js";
+import { DeleteAbl } from "../../abl/subject/delete.abl.js";
 
 const router = Router();
 
@@ -15,16 +22,7 @@ router.post(
   authenticate(),
   availableFor(["ADMIN"]),
   async (req, res) => {
-    let result;
-    try {
-      if (!validateCreate(req.body)) {
-        throw new Error("Validation failed");
-      }
-      result = await SubjectDAO.create(req.body);
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await CreateAbl(req, res);
   }
 );
 
@@ -33,13 +31,7 @@ router.get(
   authenticate(),
   availableFor(["ADMIN", "STUDENT", "TEACHER"]),
   async (req, res) => {
-    let result;
-    try {
-      result = await SubjectDAO.list();
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await ListAbl(req, res);
   }
 );
 
@@ -48,13 +40,7 @@ router.get(
   authenticate(),
   availableFor(["ADMIN", "STUDENT", "TEACHER"]),
   async (req, res) => {
-    let result;
-    try {
-      result = await TopicDAO.getSubjectsWithContents(req.params.id);
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await GetTopicsAbl(req, res);
   }
 );
 
@@ -63,13 +49,7 @@ router.get(
   authenticate(),
   availableFor(["ADMIN", "STUDENT", "TEACHER"]),
   async (req, res) => {
-    let result;
-    try {
-      result = await ContentDAO.getBySubject(req.params.id);
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await GetContentsAbl(req, res);
   }
 );
 
@@ -78,13 +58,7 @@ router.get(
   authenticate(),
   availableFor(["ADMIN", "STUDENT", "TEACHER"]),
   async (req, res) => {
-    let result;
-    try {
-      result = await SubjectDAO.get(req.params.id);
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await GetAbl(req, res);
   }
 );
 
@@ -93,16 +67,7 @@ router.post(
   authenticate(),
   availableFor(["ADMIN", "TEACHER"]),
   async (req, res) => {
-    let result;
-    try {
-      if (!validateUpdate(req.body)) {
-        throw new Error("Validation failed");
-      }
-      result = await SubjectDAO.update(req.body.id, req.body);
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await UpdateAbl(req, res);
   }
 );
 
@@ -111,13 +76,7 @@ router.post(
   authenticate(),
   availableFor(["ADMIN"]),
   async (req, res) => {
-    let result;
-    try {
-      result = await SubjectDAO.delete(req.body.id);
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await DeleteAbl(req, res);
   }
 );
 
