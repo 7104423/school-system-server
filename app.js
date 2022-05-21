@@ -70,25 +70,6 @@ if (!db) {
   console.log("Db connected successfully");
 }
 
-// Auth
-passport.use(
-  "signup",
-  new LocalStrategy(
-    {
-      usernameField: "email",
-      passwordField: "password",
-    },
-    async (email, password, done) => {
-      try {
-        const user = await UserDAO.create(email, password);
-        return done(null, user);
-      } catch (error) {
-        return done(error);
-      }
-    }
-  )
-);
-
 passport.use(
   "login",
   new LocalStrategy(
