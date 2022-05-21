@@ -10,13 +10,13 @@ const validateCreateSchema = {
     },
     goal: {
       type: "string",
-      minLength: 1,
+      minLength: 0,
       maxLength: 4000,
     },
     credits: {
       type: "number",
       minimum: 1,
-      maximum: 30
+      maximum: 30,
     },
     supervisor: {
       type: "string",
@@ -59,7 +59,7 @@ const validateUpdateSchema = {
     credits: {
       type: "number",
       minimum: 0,
-      maximum: 30
+      maximum: 30,
     },
     supervisor: {
       type: "string",
