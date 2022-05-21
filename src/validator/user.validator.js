@@ -10,6 +10,9 @@ const validateCreateSchema = {
     email: {
       type: "string",
     },
+    thirdPartyIdentity: {
+      type: "boolean",
+    },
     name: {
       type: "string",
     },
@@ -41,6 +44,9 @@ const validateUpdateSchema = {
     },
     email: {
       type: "string",
+    },
+    thirdPartyIdentity: {
+      type: "boolean",
     },
     name: {
       type: "string",

@@ -8,6 +8,7 @@ function parseToPlainObject(obj) {
   return {
     id: obj._id,
     email: obj.email,
+    thirdPartyIdentity: obj.thirdPartyIdentity,
     name: obj.name,
     surname: obj.surname,
     password: obj.password,
@@ -22,6 +23,7 @@ export class UserDAO {
    *  id?: string,
    *  _id?: string,
    *  email?: string,
+   *  thirdPartyIdentity?: boolean,
    *  name?: string,
    *  surname?: string,
    *  password?: string,
@@ -33,6 +35,7 @@ export class UserDAO {
     id,
     _id,
     email,
+    thirdPartyIdentity,
     name,
     surname,
     password,
@@ -48,6 +51,11 @@ export class UserDAO {
      * @type {string}
      */
     this.email = email || "";
+
+    /**
+     * @type {boolean}
+     */
+    this.thirdPartyIdentity = thirdPartyIdentity || false;
 
     /**
      * @type {string}
@@ -177,6 +185,7 @@ export class UserDAO {
 
     let updatedUser = {
       email: data.email,
+      thirdPartyIdentity: data.thirdPartyIdentity,
       name: data.name,
       surname: data.surname,
       password: user.password,

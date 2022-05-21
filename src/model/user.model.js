@@ -10,6 +10,7 @@ export const UserSchema = new Schema({
     required: true,
     unique: true,
   },
+  thirdPartyIdentity: Boolean,
   name: {
     type: String,
     required: true,
