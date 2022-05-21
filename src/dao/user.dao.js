@@ -189,7 +189,7 @@ export class UserDAO {
       name: data.name,
       surname: data.surname,
       password: user.password,
-      resetPassword: user.resetPassword,
+      resetPassword: data.resetPassword,
       groups: data.groups,
     };
 
@@ -210,6 +210,9 @@ export class UserDAO {
     const result = await UserModel.findByIdAndUpdate(id, updatedUser, {
       returnDocument: "after",
     });
+
+    console.log(updatedUser, result);
+
     return new this(result);
   }
 
