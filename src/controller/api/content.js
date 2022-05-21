@@ -1,11 +1,10 @@
 import { Router } from "express";
 import { authenticate, availableFor } from "../../utils";
-import { Request, Response } from "express";
-import { ContentDAO } from "./../../dao/content.dao.js";
-import {
-  validateCreate,
-  validateUpdate,
-} from "../../validator/content.validator.js";
+import { CreateAbl } from "../../abl/content/create.abl.js";
+import { ListAbl } from "../../abl/content/list.abl.js";
+import { GetAbl } from "../../abl/content/get.abl.js";
+import { UpdateAbl } from "../../abl/content/update.abl.js";
+import { DeleteAbl } from "../../abl/content/delete.abl.js";
 
 const router = Router();
 
@@ -14,16 +13,7 @@ router.post(
   authenticate(),
   availableFor(["ADMIN", "TEACHER"]),
   async (req, res) => {
-    let result;
-    try {
-      if (!validateCreate(req.body)) {
-        throw new Error("Validation failed");
-      }
-      result = await ContentDAO.create(req.body);
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await CreateAbl(req, res);
   }
 );
 
@@ -32,13 +22,7 @@ router.get(
   authenticate(),
   availableFor(["ADMIN", "STUDENT", "TEACHER"]),
   async (req, res) => {
-    let result;
-    try {
-      result = await ContentDAO.list();
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await ListAbl(req, res);
   }
 );
 
@@ -47,13 +31,7 @@ router.get(
   authenticate(),
   availableFor(["ADMIN", "STUDENT", "TEACHER"]),
   async (req, res) => {
-    let result;
-    try {
-      result = await ContentDAO.get(req.params.id);
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await GetAbl(req, res);
   }
 );
 
@@ -62,16 +40,7 @@ router.post(
   authenticate(),
   availableFor(["ADMIN", "TEACHER"]),
   async (req, res) => {
-    let result;
-    try {
-      if (!validateUpdate(req.body)) {
-        throw new Error("Validation failed");
-      }
-      result = await ContentDAO.update(req.body.id, req.body);
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await UpdateAbl(req, res);
   }
 );
 
@@ -80,13 +49,7 @@ router.post(
   authenticate(),
   availableFor(["ADMIN", "TEACHER"]),
   async (req, res) => {
-    let result;
-    try {
-      result = await ContentDAO.delete(req.body.id);
-      res.json(result);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
+    await DeleteAbl(req, res);
   }
 );
 
