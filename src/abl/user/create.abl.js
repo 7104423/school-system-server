@@ -14,6 +14,12 @@ export async function CreateAbl(req, res) {
     return res.status(400).json({ message: "Email is already taken. Use other email." });
   }
   
+  // check email format
+  let emailRegexp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  if ( !emailRegexp.test(req.body.email) ) {
+    return res.status(400).json({ message: "Bad email format." });
+  }
+
   // name is missing
   if (!req.body.name) {
     return res.status(400).json({ message: "Name is missing." });
@@ -23,8 +29,12 @@ export async function CreateAbl(req, res) {
   if (!req.body.surname) {
     return res.status(400).json({ message: "Surname is missing." });
   }
-  
-  // pasword is missing ????
+
+  // password requirements ???
+  let passwordRegexp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{5,}$/;
+  if ( !passwordRegexp.test(req.body.password) ) {
+    return res.status(400).json({ message: "Bad password format (min 5 characters, min 1 capital letter, min 1 small letter, min 1 digit)." });
+  }
   
   // groups are missing
   if (req.body.groups.length === 0) {
@@ -47,9 +57,11 @@ export async function CreateAbl(req, res) {
       
   let result;
   try {
+    // ajv validations
     if (!validateCreate(req.body)) {
       throw new Error("Validation failed");
     }
+
     result = await UserDAO.create(req.body);
     res.json(result);
   } catch (error) {
