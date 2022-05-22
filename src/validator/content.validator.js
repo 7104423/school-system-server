@@ -20,7 +20,7 @@ const validateCreateSchema = {
       maxLength: 200,
     },
   },
-  required: ["type"],
+  required: ["type", "content", "subject"],
 };
 
 const validateUpdateSchema = {
