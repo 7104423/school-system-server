@@ -30,11 +30,4 @@ export const SubjectSchema = new Schema({
   },
 });
 
-// Cascade delete
-SubjectSchema.pre("remove", function (next) {
-  TopicModel.remove({ subject: this._id }).exec();
-  ContentModel.remove({ subject: this._id }).exec();
-  next();
-});
-
 export const SubjectModel = mongoose.model("subject", SubjectSchema);

@@ -107,4 +107,9 @@ export class TopicDAO {
     const result = await TopicModel.findByIdAndDelete(id);
     return new this(parseToPlainObject(result));
   }
+
+  static async deleteQuery(query) {
+    const result = await TopicModel.remove(query);
+    return new this(parseToPlainObject(result));
+  }
 }

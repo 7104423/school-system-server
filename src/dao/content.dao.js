@@ -85,6 +85,11 @@ export class ContentDAO {
     return new this(parseToPlainObject(result));
   }
 
+  static async deleteQuery(query) {
+    const result = await ContentModel.remove(query);
+    return new this(parseToPlainObject(result));
+  }
+
   /**
    * Get subjects to the related topic
    */

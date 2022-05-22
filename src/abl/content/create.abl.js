@@ -12,10 +12,11 @@ export async function CreateAbl(req, res) {
     const { topic, subject } = req.body;
     if (topic) {
       const topicDao = await TopicDAO.get(topic);
-      if (topicDao.subject !== subject) {
+      if (String(topicDao.subject?._id) !== subject) {
         res.status(400).json({
           message: "Topic's subject is different from Digital Content subject",
         });
+        return;
       }
     }
 
